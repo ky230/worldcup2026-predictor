@@ -42,7 +42,7 @@
 
 | 数据源 | URL | 搜索内容 |
 |--------|-----|----------|
-| **FotMob** | `https://www.fotmob.com` | 包含带 Match ID 的真实比赛页链接。赛前 1 小时内为确认首发 (Confirmed Lineups)；赛前则为预计首发 (Expected Lineups)。 |
+| **FotMob** | 主专栏：`https://www.fotmob.com/leagues/77/overview/world-cup`<br>按日期查比赛页：`https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date`（支持加参数 `&page=1`，`&page=2`） | 必须从按日期筛选的 Fixtures 列表进入具体赛事 preview，直接核对战术板、球员号码、主裁及天气。确保与 FotMob 现场信息 100% 一致。 |
 | **Sofascore** | `https://www.sofascore.com` | 官方 Team Sheet 首发/替补名单、球员评分、近期表现数据。 |
 
 > **规则**：

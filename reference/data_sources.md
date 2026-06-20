@@ -15,8 +15,12 @@
 ## 🥈 实时首发阵容与首发预测
 
 ### [FotMob 世界杯数据中心](https://www.fotmob.com)
-* **用途**：获取实时首发阵容（Lineups）、战术阵型（Formation）、球员球衣号码，以及各大媒体在赛前发布的“预计首发”（Expected Lineups）。
-* **说明**：更新极为迅速的足球比分与阵容软件。
+* **主专栏 (Overview)**: [https://www.fotmob.com/leagues/77/overview/world-cup](https://www.fotmob.com/leagues/77/overview/world-cup) —— 包含所有详细信息、积分榜及深度数据统计。
+* **按日期查比赛 (Fixtures by Date)**:
+  * [https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date](https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date)
+  * [https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date&page=1](https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date&page=1)
+  * [https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date&page=2](https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date&page=2)
+* **用途**：获取精确到某一天的世界杯赛事列表，并进入单场比赛页面查看实时首发阵容 (Lineups)、战术阵型 (Formation)、球员号码、裁判、天气，以及赛前媒体预测首发。
 
 ### [Sofascore 实时比分与伤停](https://www.sofascore.com)
 * **用途**：赛前 1 小时左右获取各队官报的 Team Sheet 首发/替补名单，查询球员近期状态评分及两队历史对决的深度统计。
