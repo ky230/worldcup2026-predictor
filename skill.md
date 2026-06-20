@@ -42,15 +42,15 @@
 
 | 数据源 | URL | 搜索内容 |
 |--------|-----|----------|
-| **FotMob** | 主专栏：`https://www.fotmob.com/leagues/77/overview/world-cup`<br>按日期查比赛页：`https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date`（支持加参数 `&page=1`，`&page=2`） | 必须从按日期筛选的 Fixtures 列表进入具体赛事 preview，直接核对战术板、球员号码、主裁及天气。确保与 FotMob 现场信息 100% 一致。 |
-| **Sofascore** | `https://www.sofascore.com` | 官方 Team Sheet 首发/替补名单、球员评分、近期表现数据。 |
+| **FotMob** | • 主专栏: `https://www.fotmob.com/leagues/77/overview/world-cup`<br>• 分组与局势: `https://www.fotmob.com/leagues/77/table/world-cup?filter=all`<br>• 淘汰赛表: `https://www.fotmob.com/leagues/77/playoff/world-cup`<br>• 日期赛程: `https://www.fotmob.com/leagues/77/fixtures/world-cup?group=by-date` (支持 `&page=1`, `&page=2`, `&page=3`) <br>• 球员统计: `https://www.fotmob.com/leagues/77/stats/world-cup/players`<br>• 球队统计: `https://www.fotmob.com/leagues/77/stats/world-cup/teams`<br>• 新闻专栏: `https://www.fotmob.com/leagues/77/news/world-cup` | **第一核心数据源**。从日期赛程列表进入对应具体赛事页面，直接查看实时首发阵容 (Lineups)、战术阵型 (Formation)、球员号码、裁判、天气、伤停及预计首发，保证 100% 数据一致性。 |
+| **Sofascore** | `https://www.sofascore.com` | 辅助 Team Sheet 首发/替补名单、球员近期评分及两队历史交锋数据。 |
 
 > **规则**：
-> - **赛前（>1.5小时）首发预排规则**：我们无法预测未知的首发。**必须直接复制该队上一场比赛（第一轮）的真实出场首发阵容**作为参考底盘，页面标题标注为`📋 战术板首发阵容 (根据首轮及媒体预测)`。
-> - **严禁自行推演/虚构首发**：找不到新数据时，一律强制复制最近一轮的实际首发。
-> - **重点查询并标注伤停与吃牌**：在直接沿用首轮阵容时，必须利用 Google 搜索等渠道，重点查询该队是否有**吃牌停赛（红牌或累积黄牌）或伤病/伤停人员**。
-> - **战术板标注与置灰样式**：如果首场出战的球员本轮确认因伤病或停赛无法上场，在战术板中**必须保留该球员节点**（以维持首轮阵型对照），但必须将其名字后缀改为 `(伤停)` 或 `(停赛)`，且对该球员的圆圈圆点施加灰色底色及红色边框的醒目标识（例如：`background:#555555; color:#888888; border:1px solid #ff4444;`），以便用户及其他 AI 一目了然。
-> - **战术板直达链接**：生成的 HTML 战术板标题中，必须包含一个指向 **FotMob 对应 Match ID 的真实比赛页超链接**，方便用户随时一键核对。
+> - **赛前（>1.5小时）首发预排规则**：首选查阅 FotMob 该场比赛的 **Preview / Lineups** 模块，**直接采用 FotMob Preview 提供的预计首发阵容、阵型与球衣号码**。只有在没有提供 Preview 时，才作为后备方案克隆该队上一场比赛的实际首发阵容与球衣号码。
+> - **严禁自行虚构首发**：找不到新数据时，一律强制沿用 Preview 或最近一轮的实际首发。
+> - **重点查询并标注伤停与吃牌**：必须利用 FotMob 单场比赛的 Preview 页面、伤停板块 (Injuries/Suspensions) 或新闻专栏核实两队是否有**吃牌停赛（红牌或累计黄牌）或伤停人员**。
+> - **战术板标注与置灰样式**：如果预计首发中的球员确认因伤病或停赛无法上场，在战术板中**必须保留该球员节点**（以维持阵型对照），但必须将其名字后缀改为 `(伤停)` 或 `(停赛)`，且对该球员的圆圈圆点施加灰色底色及红色边框（`background:#555555; color:#888888; border:1px solid #ff4444;`），以便一目了然。对于黄牌在身但照常上场的球员，名字后追加 **`🟨`**（如范德芬 🟨、巴佐尔 🟨、赫迪拉 🟨）。
+> - **战术板直达链接**：生成的 HTML 战术板标题中，必须包含一个指向 **FotMob 对应 Match 的真实比赛页超链接**，方便用户一键点击核对。
 
 #### 🥈 第二优先级：比赛元信息
 
