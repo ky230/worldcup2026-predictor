@@ -37,8 +37,8 @@
         }
 
         .container {
-            width: 100%;
-            max-width: 900px;
+            width: 95%;
+            max-width: 1600px;
         }
 
         header {
@@ -97,13 +97,25 @@
         .grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 3rem;
         }
 
         @media (min-width: 600px) {
             .grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .grid {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -402,9 +414,11 @@
         .step-file-label code {
             color: var(--text-main);
             background: rgba(255, 255, 255, 0.04);
-            padding: 1px 3px;
+            padding: 2px 4px;
             border-radius: 3px;
             font-size: 0.65rem;
+            word-break: break-all;
+            white-space: normal;
         }
 
     </style>

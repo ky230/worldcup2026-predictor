@@ -32,6 +32,7 @@
     * **期望助攻 (xA)**: [https://www.fotmob.com/leagues/77/stats/season/24254/players/expected_assists/world-cup-players](https://www.fotmob.com/leagues/77/stats/season/24254/players/expected_assists/world-cup-players)
     * **创造重大机会 (Big chances created)**: [https://www.fotmob.com/leagues/77/stats/season/24254/players/big_chance_created/world-cup-players](https://www.fotmob.com/leagues/77/stats/season/24254/players/big_chance_created/world-cup-players)
     * **评分 (FotMob rating)**: [https://www.fotmob.com/leagues/77/stats/season/24254/players/rating/world-cup-players](https://www.fotmob.com/leagues/77/stats/season/24254/players/rating/world-cup-players)
+    * **黄牌 (Yellow cards)**: [https://www.fotmob.com/leagues/77/stats/season/24254/players/yellow_card/world-cup-players](https://www.fotmob.com/leagues/77/stats/season/24254/players/yellow_card/world-cup-players)
 * **球队统计数据**: [https://www.fotmob.com/leagues/77/stats/world-cup/teams](https://www.fotmob.com/leagues/77/stats/world-cup/teams)
   * **用途**：检索团队层面的整体战术实力指标。
   * **各项核心团队指标直达链接 (Season ID: 24254)**：

@@ -34,8 +34,8 @@
         }
 
         .container {
-            width: 100%;
-            max-width: 1000px;
+            width: 95%;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -208,6 +208,19 @@
             gap: 0.25rem;
         }
 
+        .pane-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .pane-title a:hover {
+            color: var(--primary-color);
+        }
+
         .lineup-list {
             list-style: none;
             font-size: 0.85rem;
@@ -248,7 +261,7 @@
         }
         @media (min-width: 600px) {
             .match-info-banner {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
         .info-item {
@@ -422,7 +435,7 @@
         /* Adjust details layouts to span wider on desktop for visual pitch */
         @media (min-width: 900px) {
             .details-grid {
-                grid-template-columns: 2.2fr 1.3fr;
+                grid-template-columns: 1.80fr 1.70fr;
             }
         }
 
@@ -513,6 +526,135 @@
             font-weight: bold;
             margin-top: 0.75rem;
         }
+
+        /* =============================================
+           更衣室晴雨表 & 舆情哨 — CSS 样式
+           ============================================= */
+        .dressing-room-barometer {
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .barometer-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+        .barometer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 600px) {
+            .barometer-grid { grid-template-columns: 1fr; }
+        }
+        .barometer-team-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+        .meter-row {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.3rem;
+        }
+        .meter-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            width: 90px;
+            flex-shrink: 0;
+        }
+        .meter-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .meter-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+        .meter-score {
+            font-size: 0.68rem;
+            font-family: monospace;
+            color: var(--text-muted);
+            width: 24px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .barometer-status {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .status-green {
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid rgba(0, 255, 102, 0.25);
+            color: var(--primary-color);
+        }
+        .status-yellow {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            color: #fbbf24;
+        }
+        .status-red {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.25);
+            color: #ff4444;
+        }
+        .scout-brief {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.06);
+        }
+        .scout-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+        }
+        .scout-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .scout-tag {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            line-height: 1.4;
+            display: inline-block;
+            width: fit-content;
+        }
+        .tag-normal {
+            background: rgba(0, 255, 102, 0.06);
+            border: 1px solid rgba(0, 255, 102, 0.15);
+            color: #a0c8b0;
+        }
+        .tag-watch {
+            background: rgba(251, 191, 36, 0.07);
+            border: 1px solid rgba(251, 191, 36, 0.18);
+            color: #d4a840;
+        }
+        .tag-alert {
+            background: rgba(255, 68, 68, 0.07);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            color: #cc6666;
+        }
     </style>
 </head>
 <body>
@@ -522,7 +664,8 @@
             <a href="../index.html" class="back-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></svg>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
                 返回主控制台
             </a>
         </div>
@@ -537,561 +680,1089 @@
         <main>
             <div class="match-list">
                 
-                <!-- Match 1: Netherlands vs Sweden (06-20 19:00) -->
                 <div class="match-card">
-                    <div class="match-meta">
-                        <span class="group-tag">小组赛 F 组</span>
-                        <span class="match-time">06-20 19:00 (未开始)</span>
+    <div class="match-meta">
+        <span class="group-tag">小组赛第 2 轮 · F 组</span>
+        <span class="match-time">2026-06-20 19:00</span>
+    </div>
+    
+    <div class="match-vs">
+        <div class="team-box">
+            <span class="team-name">🇳🇱 荷兰</span>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="team-box">
+            <span class="team-name">🇸🇪 瑞典</span>
+        </div>
+    </div>
+
+    <div class="match-info-banner">
+        <div class="info-item">
+            <span class="info-label">🏟️ 比赛球场</span>
+            <span class="info-value">休斯敦体育场 (Houston Stadium)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌤️ 气候气温</span>
+            <span class="info-value">多云 / 28°C</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌿 场馆草皮</span>
+            <span class="info-value">伸缩屋顶 · 天然草</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">⚖️ 主裁判</span>
+            <span class="info-value">迈克尔·奥利弗 (英格兰)</span>
+        </div>
+    </div>
+
+    <div class="squad-info-section">
+        <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+        <p class="squad-desc-text">
+            <strong>荷兰</strong>：中场核心德容复出坐镇，主力中场廷贝尔因伤缺席，西蒙斯与加克波两翼齐飞。
+            <br>
+            <strong>瑞典</strong>：首战5球大捷士气正旺，锋线双星约克雷斯与伊兰加首发，防守型中场史密斯因伤缺阵。
+        </p>
+    </div>
+
+    <!-- 更衣室晴雨表 & 舆情哨 -->
+    <div class="dressing-room-barometer">
+        <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+        <div class="barometer-grid">
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇳🇱 荷兰</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
                     </div>
-                    <div class="match-vs">
-                        <div class="team-box">
-                            <span class="team-name">荷兰 🇳🇱 <small style="font-size: 0.8rem; color: var(--accent-color); font-weight:normal;">(主)</small></span>
-                        </div>
-                        <span class="vs-divider">VS</span>
-                        <div class="team-box">
-                            <span class="team-name">瑞典 🇸🇪</span>
-                        </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.5</span>
                     </div>
-
-                    <!-- Environment Info -->
-                    <div class="match-info-banner">
-                        <div class="info-item">
-                            <span class="info-label">比赛场地</span>
-                            <span class="info-value">休斯敦球场 (NRG Stadium)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">天气状况</span>
-                            <span class="info-value">多云 (室内空调已开启) / 约 29°C (84°F)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">场馆类型</span>
-                            <span class="info-value">伸缩屋顶 / 人工草皮</span>
-                        </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 55%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">5.5</span>
                     </div>
-
-                    <!-- Squad & Background Info -->
-                    <div class="squad-info-section">
-                        <div class="squad-col-title">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            大名单关键人物与伤停背景
-                        </div>
-                        <p class="squad-desc-text">
-                            <strong>荷兰大名单：</strong>主教练科曼。核心包括中后卫范戴克 (Virgil van Dijk)、中场德容 (Frenkie de Jong)、前锋加克波 (Cody Gakpo)。首轮 2-2 憾平日本，赫拉芬贝赫表现优异贡献两助攻。<br>
-                            <strong>瑞典大名单：</strong>主教练托马森。锋线由约克雷斯 (Viktor Gyökeres) 领衔，首轮 5-1 大战狂胜突尼斯，阿亚里斩获梅开二度。<br>
-                            <span style="color:#00ff66;">ℹ️ 伤停/情报：荷兰队中场昆滕·廷贝尔因伤缺阵，后卫范德芬与前锋德佩首轮有黄牌在身；瑞典队后卫埃里克·史密斯因伤缺阵，主力前锋伊萨克因战术安排或伤病预防未入预测首发，由埃兰加顶替。</span>
-                        </p>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 20%; background:#00ff66;"></div></div>
+                        <span class="meter-score">2.0</span>
                     </div>
-
-                    <div class="match-details">
-                        <div class="details-grid">
-                            <div class="detail-pane" style="overflow-x: auto;">
-                                 <div class="pane-title">
-                                    📋 战术板预测阵容 (FotMob预测阵容)
-                                    <a href="https://www.fotmob.com/matches/netherlands-vs-sweden/1x1gy6" target="_blank" style="margin-left: auto; font-size: 0.8rem; font-weight: normal; color: var(--accent-color); text-decoration: underline; display: inline-flex; align-items: center; gap: 2px;">
-                                        在 FotMob 查看可能的阵容
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                    </a>
-                                </div>
-                                <div class="soccer-pitch">
-                                    <!-- Field Markings -->
-                                    <div class="pitch-line midfield-line"></div>
-                                    <div class="midfield-circle"></div>
-                                    <div class="center-spot"></div>
-                                    <div class="pitch-line penalty-box-left"></div>
-                                    <div class="pitch-line penalty-box-right"></div>
-                                    
-                                    <!-- Team Labels -->
-                                    <div style="position:absolute; top:8px; left:12px; font-size:0.75rem; font-weight:bold; color:#ff6600; z-index:2;">荷兰 🇳🇱 (4-3-3)</div>
-                                    <div style="position:absolute; top:8px; right:12px; font-size:0.75rem; font-weight:bold; color:#ffd60a; z-index:2;">瑞典 🇸🇪 (3-1-4-2)</div>
-
-                                    <!-- Netherlands Players (Home - Orange) -->
-                                    <div class="player-node" style="left: 6%; top: 50%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">1</div><div class="player-name">费布鲁根</div></div>
-                                    <div class="player-node" style="left: 24%; top: 85%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">22</div><div class="player-name">邓弗里斯</div></div>
-                                    <div class="player-node" style="left: 18%; top: 60%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">6</div><div class="player-name">范黑克</div></div>
-                                    <div class="player-node" style="left: 18%; top: 40%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">4</div><div class="player-name">范戴克</div></div>
-                                    <div class="player-node" style="left: 24%; top: 15%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">15</div><div class="player-name">范德芬 🟨</div></div>
-                                    <div class="player-node" style="left: 28%; top: 50%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">21</div><div class="player-name">德容</div></div>
-                                    <div class="player-node" style="left: 34%; top: 70%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">8</div><div class="player-name">赫拉芬贝赫</div></div>
-                                    <div class="player-node" style="left: 34%; top: 30%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">14</div><div class="player-name">赖因德斯</div></div>
-                                    <div class="player-node" style="left: 44%; top: 78%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">24</div><div class="player-name">萨默维尔</div></div>
-                                    <div class="player-node" style="left: 45%; top: 50%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">18</div><div class="player-name">马伦</div></div>
-                                    <div class="player-node" style="left: 44%; top: 22%;"><div class="player-circle" style="background:#ff6600; color:#fff; border:1px solid #fff;">11</div><div class="player-name">加克波</div></div>
-
-                                    <!-- Sweden Players (Away - Yellow/Blue) -->
-                                    <div class="player-node" style="left: 94%; top: 50%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">23</div><div class="player-name">诺德菲尔特</div></div>
-                                    <div class="player-node" style="left: 84%; top: 28%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">2</div><div class="player-name">拉格比尔克</div></div>
-                                    <div class="player-node" style="left: 84%; top: 50%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">4</div><div class="player-name">希恩</div></div>
-                                    <div class="player-node" style="left: 84%; top: 72%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">3</div><div class="player-name">林德洛夫</div></div>
-                                    <div class="player-node" style="left: 76%; top: 15%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">21</div><div class="player-name">本哈德森</div></div>
-                                    <div class="player-node" style="left: 70%; top: 38%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">16</div><div class="player-name">卡尔斯特伦</div></div>
-                                    <div class="player-node" style="left: 70%; top: 62%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">18</div><div class="player-name">阿亚里</div></div>
-                                    <div class="player-node" style="left: 76%; top: 85%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">5</div><div class="player-name">古德蒙德松</div></div>
-                                    <div class="player-node" style="left: 66%; top: 50%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">10</div><div class="player-name">尼格伦</div></div>
-                                    <div class="player-node" style="left: 58%; top: 35%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">17</div><div class="player-name">约克雷斯</div></div>
-                                    <div class="player-node" style="left: 58%; top: 65%;"><div class="player-circle" style="background:#ffd60a; color:#00529c; border:1px solid #00529c;">11</div><div class="player-name">埃兰加</div></div>
-                                </div>
-                            </div>
-                            <div class="detail-pane">
-                                <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
-                                
-                                <div class="prob-container">
-                                    <div class="prob-labels">
-                                        <span>荷兰 胜 (40%)</span>
-                                        <span>平局 (30%)</span>
-                                        <span>瑞典 胜 (30%)</span>
-                                    </div>
-                                    <div class="prob-bar">
-                                        <div class="prob-segment" style="width: 40%; background: var(--primary-color);"></div>
-                                        <div class="prob-segment" style="width: 30%; background: var(--text-muted);"></div>
-                                        <div class="prob-segment" style="width: 30%; background: var(--accent-color);"></div>
-                                    </div>
-                                </div>
-
-                                <div class="section-sub-title">让球指数预测 (荷兰 -0.5)</div>
-                                <div>
-                                    <span class="recommendation-tag">首选：让负 (瑞典受让平快不败)</span>
-                                    <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：平局独赢 (双方握手言和)</span>
-                                </div>
-
-                                <div class="section-sub-title">波胆/比分倾向</div>
-                                <div class="score-tags">
-                                    <span class="score-badge">稳胆 2-2</span>
-                                    <span class="score-badge">稳胆 1-1</span>
-                                    <span class="score-badge upset">防冷 2-1</span>
-                                    <span class="score-badge upset">防冷 1-2</span>
-                                </div>
-
-                                <div class="section-sub-title">核心战术要点</div>
-                                <ul class="factor-list">
-                                    <li>• 瑞典约克雷斯与伊萨克双塔威力巨大，能直接冲击范戴克领衔的高空防线。</li>
-                                    <li>• 荷兰队中场由于西蒙斯缺席，前插活力受限，进攻多依赖加克波的左路内切。</li>
-                                    <li>• 封闭场馆空调气温宜人，有利于高节奏的攻防转换，大比分概率极高。</li>
-                                </ul>
-
-                                <p class="prediction-detail-text">
-                                    <strong>解说倾向：</strong>本场是F组头名关键一战。瑞典首轮大胜突尼斯显示了托马森极简、高效的进攻战术。荷兰在攻防两端则稍显慢热，防线面对日本被两度撕开。此役面对身体与速度俱佳的瑞典锋线，范戴克和德弗赖的抗压能力将是荷兰的生死线。中场核心赫拉芬贝赫本场任务繁重，需要压制瑞典库卢的穿针引线。看好两队大打对攻，2-2大比分平局是合理首选。
-                                </p>
-                            </div>
-                        </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
                     </div>
                 </div>
-
-                <!-- Match 2: Germany vs Ivory Coast (06-20 22:00) -->
-                <div class="match-card">
-                    <div class="match-meta">
-                        <span class="group-tag">小组赛 E 组</span>
-                        <span class="match-time">06-20 22:00 (未开始)</span>
+                <div class="barometer-status status-green">🟢 正常出征</div>
+            </div>
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇸🇪 瑞典</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
                     </div>
-                    <div class="match-vs">
-                        <div class="team-box">
-                            <span class="team-name">德国 🇩🇪 <small style="font-size: 0.8rem; color: var(--accent-color); font-weight:normal;">(主)</small></span>
-                        </div>
-                        <span class="vs-divider">VS</span>
-                        <div class="team-box">
-                            <span class="team-name">科特迪瓦 🇨🇮</span>
-                        </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">9.0</span>
                     </div>
-
-                    <!-- Environment Info -->
-                    <div class="match-info-banner">
-                        <div class="info-item">
-                            <span class="info-label">比赛场地</span>
-                            <span class="info-value">多伦多球场 (BMO Field)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">天气状况</span>
-                            <span class="info-value">多云 / 约 20°C (68°F)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">场馆类型</span>
-                            <span class="info-value">露天球场 / 混合草皮</span>
-                        </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 45%; background:#00ff66;"></div></div>
+                        <span class="meter-score">4.5</span>
                     </div>
-
-                    <!-- Squad & Background Info -->
-                    <div class="squad-info-section">
-                        <div class="squad-col-title">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            大名单关键人物与伤停背景
-                        </div>
-                        <p class="squad-desc-text">
-                            <strong>德国大名单：</strong>主教练纳格尔斯曼。锋线三叉戟萨内 (Leroy Sané)、穆西亚拉 (Jamal Musiala)、维尔茨 (Florian Wirtz)，前锋哈弗茨 (Kai Havertz)。首战 7-1 狂胜库拉索狂揽积分。<br>
-                            <strong>科特迪瓦大名单：</strong>主教练Emerse Faé。核心中场凯西 (Franck Kessié)、翼锋迪奥曼德 (Yan Diomande)，锋线阿玛德·迪亚洛 (Amad Diallo) 在首战中替补登场攻入第90分钟绝杀进球。<br>
-                            <span style="color:#00ff66;">ℹ️ 伤停/情报：德国队首场轻松大胜且无新增伤病；科特迪瓦主力中锋阿莱 (Sébastien Haller) 因小腿轻伤预计替补，年轻锋线新星博尼 (Ange-Yoan Bonny) 将与尼古拉斯·佩佩搭档首发，瓦希 (Elye Wahi) 替补待命。</span>
-                        </p>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 20%; background:#00ff66;"></div></div>
+                        <span class="meter-score">2.0</span>
                     </div>
-
-                    <div class="match-details">
-                        <div class="details-grid">
-                            <div class="detail-pane" style="overflow-x: auto;">
-                                <div class="pane-title">
-                                    📋 战术板预测阵容 (FotMob预测阵容)
-                                    <a href="https://www.fotmob.com/matches/ivory-coast-vs-germany/1xi59e" target="_blank" style="margin-left: auto; font-size: 0.8rem; font-weight: normal; color: var(--accent-color); text-decoration: underline; display: inline-flex; align-items: center; gap: 2px;">
-                                        在 FotMob 查看可能的阵容
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                    </a>
-                                </div>
-                                <div class="soccer-pitch">
-                                    <!-- Field Markings -->
-                                    <div class="pitch-line midfield-line"></div>
-                                    <div class="midfield-circle"></div>
-                                    <div class="center-spot"></div>
-                                    <div class="pitch-line penalty-box-left"></div>
-                                    <div class="pitch-line penalty-box-right"></div>
-                                    
-                                    <!-- Team Labels -->
-                                    <div style="position:absolute; top:8px; left:12px; font-size:0.75rem; font-weight:bold; color:#ffffff; z-index:2;">德国 🇩🇪 (4-2-3-1)</div>
-                                    <div style="position:absolute; top:8px; right:12px; font-size:0.75rem; font-weight:bold; color:#ff8c00; z-index:2;">科特迪瓦 🇨🇮 (4-4-2)</div>
-
-                                    <!-- Germany Players (Home - White) -->
-                                    <div class="player-node" style="left: 6%; top: 50%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">1</div><div class="player-name">诺伊尔</div></div>
-                                    <div class="player-node" style="left: 24%; top: 85%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">6</div><div class="player-name">基米希</div></div>
-                                    <div class="player-node" style="left: 18%; top: 60%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">4</div><div class="player-name">塔</div></div>
-                                    <div class="player-node" style="left: 18%; top: 40%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">15</div><div class="player-name">施洛特贝克</div></div>
-                                    <div class="player-node" style="left: 24%; top: 15%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">18</div><div class="player-name">布朗</div></div>
-                                    <div class="player-node" style="left: 28%; top: 38%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">5</div><div class="player-name">帕夫洛维奇</div></div>
-                                    <div class="player-node" style="left: 28%; top: 62%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">23</div><div class="player-name">恩梅查</div></div>
-                                    <div class="player-node" style="left: 38%; top: 78%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">19</div><div class="player-name">萨内</div></div>
-                                    <div class="player-node" style="left: 36%; top: 50%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">10</div><div class="player-name">穆西亚拉</div></div>
-                                    <div class="player-node" style="left: 38%; top: 22%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">17</div><div class="player-name">维尔茨</div></div>
-                                    <div class="player-node" style="left: 45%; top: 50%;"><div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">7</div><div class="player-name">哈弗茨</div></div>
-
-                                    <!-- Ivory Coast Players (Away - Orange) -->
-                                    <div class="player-node" style="left: 94%; top: 50%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">1</div><div class="player-name">Y-法法纳</div></div>
-                                    <div class="player-node" style="left: 78%; top: 15%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">17</div><div class="player-name">杜埃</div></div>
-                                    <div class="player-node" style="left: 82%; top: 38%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">5</div><div class="player-name">辛戈</div></div>
-                                    <div class="player-node" style="left: 82%; top: 62%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">21</div><div class="player-name">恩迪卡</div></div>
-                                    <div class="player-node" style="left: 78%; top: 85%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">3</div><div class="player-name">科南</div></div>
-                                    <div class="player-node" style="left: 70%; top: 76%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">11</div><div class="player-name">迪奥曼德</div></div>
-                                    <div class="player-node" style="left: 70%; top: 38%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">8</div><div class="player-name">凯西</div></div>
-                                    <div class="player-node" style="left: 70%; top: 62%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">6</div><div class="player-name">S-福法纳</div></div>
-                                    <div class="player-node" style="left: 70%; top: 24%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">15</div><div class="player-name">迪亚洛</div></div>
-                                    <div class="player-node" style="left: 58%; top: 35%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">19</div><div class="player-name">佩佩</div></div>
-                                    <div class="player-node" style="left: 58%; top: 65%;"><div class="player-circle" style="background:#ff8c00; color:#009b3a; border:1px solid #009b3a;">9</div><div class="player-name">博尼</div></div>
-                                </div>
-                            </div>
-                            <div class="detail-pane">
-                                <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
-                                
-                                <div class="prob-container">
-                                    <div class="prob-labels">
-                                        <span>德国 胜 (60%)</span>
-                                        <span>平局 (25%)</span>
-                                        <span>科特迪瓦 胜 (15%)</span>
-                                    </div>
-                                    <div class="prob-bar">
-                                        <div class="prob-segment" style="width: 60%; background: var(--primary-color);"></div>
-                                        <div class="prob-segment" style="width: 25%; background: var(--text-muted);"></div>
-                                        <div class="prob-segment" style="width: 15%; background: var(--accent-color);"></div>
-                                    </div>
-                                </div>
-
-                                <div class="section-sub-title">让球指数预测 (德国 -1)</div>
-                                <div>
-                                    <span class="recommendation-tag">首选：让胜 (德国净胜2球+)</span>
-                                    <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：让平 (德国1球小胜)</span>
-                                </div>
-
-                                <div class="section-sub-title">波胆/比分倾向</div>
-                                <div class="score-tags">
-                                    <span class="score-badge">稳胆 2-0</span>
-                                    <span class="score-badge">稳胆 3-1</span>
-                                    <span class="score-badge upset">防冷 2-1</span>
-                                    <span class="score-badge upset">防冷 1-1</span>
-                                </div>
-
-                                <div class="section-sub-title">核心战术要点</div>
-                                <ul class="factor-list">
-                                    <li>• 纳格尔斯曼战术注重空间渗透，穆西亚拉与维尔茨小范围串联能穿透密集防守。</li>
-                                    <li>• 科特迪瓦中场身体素质强悍，凯西与塞科·福法纳的双后腰绞杀具备极强的拦截能力。</li>
-                                    <li>• 多伦多阴天气温凉爽（约20°C），混合草皮条件优越，极有利于德国队的地面渗透流推进。</li>
-                                </ul>
-
-                                <p class="prediction-detail-text">
-                                    <strong>解说倾向：</strong>这是一场针尖对麦芒的强强对话。德国在首轮以 7-1 大胜库拉索，维尔茨和哈弗茨等人脚感发烫，全队士气处于顶点。而科特迪瓦首轮则在稳固防守的前提下，通过迪亚洛在第90分钟的替补绝杀 1-0 击败厄瓜多尔，展现出极其强悍的韧性与反击效率。科特迪瓦的凯西与塞科·福法纳在身体对抗上会给年轻的帕夫洛维奇与防线制造巨大麻烦。由于阿莱依然有伤在身，博尼与佩佩的搭档效果将是科特迪瓦能否爆冷的关键。但德国整体深度更占优势，看好德国最终 2-0 或 2-1 胜出。
-                                </p>
-                            </div>
-                        </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
                     </div>
                 </div>
+                <div class="barometer-status status-green">🟢 正常出征</div>
+            </div>
+        </div>
+        <div class="scout-brief">
+            <div class="scout-title">📡 舆情哨情报简报</div>
+            <div class="scout-content">
+                <span class="scout-tag status-green"> Netherlands: 德容复出稳定中场枢纽，整体求胜欲望极强，渴望出线首胜。</span>
+                <span class="scout-tag status-green"> Sweden: 约克雷斯与伊兰加反击极具威胁，大胜后士气处于巅峰状态。</span>
+            </div>
+        </div>
+    </div>
 
-                <!-- Match 3: Ecuador vs Curaçao (06-21 02:00) -->
-                <div class="match-card">
-                    <div class="match-meta">
-                        <span class="group-tag">小组赛 E 组</span>
-                        <span class="match-time">06-21 02:00 (未开始)</span>
+    <div class="match-details">
+        <div class="details-grid">
+            <!-- 左侧：战术板 -->
+            <div class="detail-pane">
+                <div class="pane-title">
+                    <a href="https://www.fotmob.com/matches/netherlands-vs-sweden/1x1gy6#4667786" target="_blank">
+                        📋 战术板预测阵容 (荷兰 4-3-3 vs 3-4-1-2 瑞典 🔗)
+                    </a>
+                </div>
+                <div class="soccer-pitch">
+                    <div class="pitch-line midfield-line"></div>
+                    <div class="pitch-line midfield-circle"></div>
+                    <div class="pitch-line center-spot"></div>
+                    <div class="pitch-line penalty-box-left"></div>
+                    <div class="pitch-line penalty-box-right"></div>
+                    
+                    <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">1</div>
+                        <div class="player-name">维尔布鲁根</div>
                     </div>
-                    <div class="match-vs">
-                        <div class="team-box">
-                            <span class="team-name">厄瓜多尔 🇪🇨 <small style="font-size: 0.8rem; color: var(--accent-color); font-weight:normal;">(主)</small></span>
-                        </div>
-                        <span class="vs-divider">VS</span>
-                        <div class="team-box">
-                            <span class="team-name">库拉索 🇨🇼</span>
-                        </div>
+                    <div class="player-node" style="left: 17.940%; top: 87.500%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">22</div>
+                        <div class="player-name">邓弗里斯</div>
                     </div>
-
-                    <!-- Environment Info -->
-                    <div class="match-info-banner">
-                        <div class="info-item">
-                            <span class="info-label">比赛场地</span>
-                            <span class="info-value">堪萨斯城球场 (Arrowhead Stadium)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">天气状况</span>
-                            <span class="info-value">多云 / 约 28°C (82°F)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">场馆类型</span>
-                            <span class="info-value">露天球场 / 天然草皮</span>
-                        </div>
+                    <div class="player-node" style="left: 17.940%; top: 62.500%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">6</div>
+                        <div class="player-name">范黑克</div>
                     </div>
-
-                    <!-- Squad & Background Info -->
-                    <div class="squad-info-section">
-                        <div class="squad-col-title">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            大名单关键人物与伤停背景
-                        </div>
-                        <p class="squad-desc-text">
-                            <strong>厄瓜多尔大名单：</strong>主教练贝卡切切。队长锋线核心瓦伦西亚 (Enner Valencia)、中场核心凯塞多 (Moisés Caicedo)、后卫帕乔 (Willian Pacho) 以及因卡皮耶 (Piero Hincapié)。首轮 0-1 憾负于科特迪瓦，本场急需取胜。<br>
-                            <strong>库拉索大名单：</strong>老帅艾德沃卡特执教。主力包括边锋陈达毅 (Tahith Chong)、中场巴库纳兄弟 (Leandro & Juninho Bacuna)、后卫弗洛拉纳斯 (Sherel Floranus)。首场以 1-7 惨败给德国队。<br>
-                            <span style="color:#00ff66;">ℹ️ 伤停/情报：厄瓜多尔后卫波罗佐 (Jackson Porozo) 🟨 首轮染黄，本场大名单全员健康；库拉索主力中卫巴佐尔 (Riechedly Bazoer) 🟨 首轮染黄，本场身背黄牌出战。两队均无新增伤病或停赛。</span>
-                        </p>
+                    <div class="player-node" style="left: 17.940%; top: 37.500%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">4</div>
+                        <div class="player-name">范戴克</div>
                     </div>
-
-                    <div class="match-details">
-                        <div class="details-grid">
-                            <div class="detail-pane" style="overflow-x: auto;">
-                                <div class="pane-title">
-                                    📋 战术板预测阵容 (FotMob预测阵容)
-                                    <a href="https://www.fotmob.com/matches/ecuador-vs-curacao/jy3jhs3#4667779" target="_blank" style="margin-left: auto; font-size: 0.8rem; font-weight: normal; color: var(--accent-color); text-decoration: underline; display: inline-flex; align-items: center; gap: 2px;">
-                                        在 FotMob 查看可能的阵容
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                    </a>
-                                </div>
-                                <div class="soccer-pitch">
-                                    <!-- Field Markings -->
-                                    <div class="pitch-line midfield-line"></div>
-                                    <div class="midfield-circle"></div>
-                                    <div class="center-spot"></div>
-                                    <div class="pitch-line penalty-box-left"></div>
-                                    <div class="pitch-line penalty-box-right"></div>
-                                    
-                                    <!-- Team Labels -->
-                                    <div style="position:absolute; top:8px; left:12px; font-size:0.75rem; font-weight:bold; color:#ffcc00; z-index:2;">厄瓜多尔 🇪🇨 (4-2-3-1)</div>
-                                    <div style="position:absolute; top:8px; right:12px; font-size:0.75rem; font-weight:bold; color:#0056b3; z-index:2;">库拉索 🇨🇼 (4-3-3)</div>
-
-                                    <!-- Ecuador Players (Home - Yellow) -->
-                                    <div class="player-node" style="left: 6%; top: 50%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">1</div><div class="player-name">加林德斯</div></div>
-                                    <div class="player-node" style="left: 24%; top: 85%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">17</div><div class="player-name">普雷西亚多</div></div>
-                                    <div class="player-node" style="left: 18%; top: 40%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">4</div><div class="player-name">奥尔多涅斯</div></div>
-                                    <div class="player-node" style="left: 18%; top: 60%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">6</div><div class="player-name">帕乔</div></div>
-                                    <div class="player-node" style="left: 24%; top: 15%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">3</div><div class="player-name">因卡皮耶</div></div>
-                                    <div class="player-node" style="left: 28%; top: 62%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">23</div><div class="player-name">凯塞多</div></div>
-                                    <div class="player-node" style="left: 28%; top: 38%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">21</div><div class="player-name">弗兰科</div></div>
-                                    <div class="player-node" style="left: 38%; top: 78%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">9</div><div class="player-name">耶博阿</div></div>
-                                    <div class="player-node" style="left: 36%; top: 50%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">15</div><div class="player-name">维特</div></div>
-                                    <div class="player-node" style="left: 38%; top: 22%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">19</div><div class="player-name">普拉塔</div></div>
-                                    <div class="player-node" style="left: 45%; top: 50%;"><div class="player-circle" style="background:#ffcc00; color:#000; border:1px solid #000;">13</div><div class="player-name">瓦伦西亚</div></div>
-
-                                    <!-- Curaçao Players (Away - Blue) -->
-                                    <div class="player-node" style="left: 94%; top: 50%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">1</div><div class="player-name">鲁姆</div></div>
-                                    <div class="player-node" style="left: 76%; top: 85%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">24</div><div class="player-name">丰维尔</div></div>
-                                    <div class="player-node" style="left: 82%; top: 62%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">18</div><div class="player-name">奥比斯波</div></div>
-                                    <div class="player-node" style="left: 82%; top: 38%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #ffcc00;">23</div><div class="player-name">巴佐尔 🟨</div></div>
-                                    <div class="player-node" style="left: 76%; top: 15%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">5</div><div class="player-name">弗洛拉纳斯</div></div>
-                                    <div class="player-node" style="left: 68%; top: 75%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">7</div><div class="player-name">J-巴库纳</div></div>
-                                    <div class="player-node" style="left: 72%; top: 50%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">10</div><div class="player-name">L-巴库纳</div></div>
-                                    <div class="player-node" style="left: 68%; top: 25%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">8</div><div class="player-name">科门嫩西亚</div></div>
-                                    <div class="player-node" style="left: 60%; top: 80%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">12</div><div class="player-name">汉森</div></div>
-                                    <div class="player-node" style="left: 58%; top: 50%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">9</div><div class="player-name">洛卡迪亚</div></div>
-                                    <div class="player-node" style="left: 60%; top: 20%;"><div class="player-circle" style="background:#0056b3; color:#fff; border:1px solid #fff;">21</div><div class="player-name">陈达毅</div></div>
-                                </div>
-                            </div>
-                            <div class="detail-pane">
-                                <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
-                                
-                                <div class="prob-container">
-                                    <div class="prob-labels">
-                                        <span>厄瓜多尔 胜 (75%)</span>
-                                        <span>平局 (18%)</span>
-                                        <span>库拉索 胜 (7%)</span>
-                                    </div>
-                                    <div class="prob-bar">
-                                        <div class="prob-segment" style="width: 75%; background: var(--primary-color);"></div>
-                                        <div class="prob-segment" style="width: 18%; background: var(--text-muted);"></div>
-                                        <div class="prob-segment" style="width: 7%; background: var(--accent-color);"></div>
-                                    </div>
-                                </div>
-
-                                <div class="section-sub-title">让球指数预测 (厄瓜多尔 -1.5)</div>
-                                <div>
-                                    <span class="recommendation-tag">首选：让胜 (厄瓜多尔净胜2球+)</span>
-                                    <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：让平 (厄瓜多尔净胜2球刚好)</span>
-                                </div>
-
-                                <div class="section-sub-title">波胆/比分倾向</div>
-                                <div class="score-tags">
-                                    <span class="score-badge">稳胆 3-0</span>
-                                    <span class="score-badge">稳胆 2-0</span>
-                                    <span class="score-badge upset">防冷 4-0</span>
-                                    <span class="score-badge upset">防冷 1-1</span>
-                                </div>
-
-                                <div class="section-sub-title">核心战术要点</div>
-                                <ul class="factor-list">
-                                    <li>• 厄瓜多尔中场凯塞多抢断和拦截压迫感强，能牢牢控制中场球权并限制库拉索反击。</li>
-                                    <li>• 库拉索主力前锋洛卡迪亚和陈达毅面临厄瓜多尔帕乔及因卡皮耶组成的硬核防线，很难获得起脚机会。</li>
-                                    <li>• 堪萨斯城球场天然草皮状况良好，有利于厄瓜多尔通过边路速度与倒三角传中撕开库拉索防线。</li>
-                                </ul>
-
-                                <p class="prediction-detail-text">
-                                    <strong>解说倾向：</strong>本场是小组赛次轮的出线关键战。厄瓜多尔首场1球惜败科特迪瓦，若想出线本场面对库拉索必须全力争胜并赚足净胜球。库拉索首场1-7负于德国，防线可谓漏洞百出。本场主教练艾德沃卡特或将阵型回收主打铁桶阵。但厄瓜多尔在凯塞多和瓦伦西亚等球星的带领下，实力明显高出几档，两队有着绝对的实力差距。看好厄瓜多尔自始至终掌控局面，取得一场3-0或4-0的完胜。
-                                </p>
-                            </div>
-                        </div>
+                    <div class="player-node" style="left: 17.940%; top: 12.500%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">15</div>
+                        <div class="player-name">范德文 🟨</div>
+                    </div>
+                    <div class="player-node" style="left: 29.908%; top: 79.000%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">8</div>
+                        <div class="player-name">赫拉芬贝赫</div>
+                    </div>
+                    <div class="player-node" style="left: 29.908%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">21</div>
+                        <div class="player-name">德容</div>
+                    </div>
+                    <div class="player-node" style="left: 29.908%; top: 21.000%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">14</div>
+                        <div class="player-name">赖因德斯</div>
+                    </div>
+                    <div class="player-node" style="left: 41.922%; top: 79.000%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">24</div>
+                        <div class="player-name">萨默维尔 🟨</div>
+                    </div>
+                    <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">18</div>
+                        <div class="player-name">马伦</div>
+                    </div>
+                    <div class="player-node" style="left: 41.922%; top: 21.000%;">
+                        <div class="player-circle" style="background:#ff6600; color:#ffffff; border:1px solid #ffffff;">11</div>
+                        <div class="player-name">加克波</div>
+                    </div>
+                    
+                    <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">23</div>
+                        <div class="player-name">诺德费尔特</div>
+                    </div>
+                    <div class="player-node" style="left: 85.099%; top: 21.000%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">2</div>
+                        <div class="player-name">拉格比尔克</div>
+                    </div>
+                    <div class="player-node" style="left: 85.099%; top: 50.000%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">4</div>
+                        <div class="player-name">希恩</div>
+                    </div>
+                    <div class="player-node" style="left: 85.099%; top: 79.000%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">3</div>
+                        <div class="player-name">林德洛夫</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 12.500%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">21</div>
+                        <div class="player-name">伯恩哈德松</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 37.500%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">16</div>
+                        <div class="player-name">卡尔斯特伦</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 62.500%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">18</div>
+                        <div class="player-name">阿亚里</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 87.500%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">5</div>
+                        <div class="player-name">古德蒙德松</div>
+                    </div>
+                    <div class="player-node" style="left: 67.053%; top: 50.000%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">10</div>
+                        <div class="player-name">尼格伦</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 30.000%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">17</div>
+                        <div class="player-name">约克雷斯</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 70.000%;">
+                        <div class="player-circle" style="background:#005b99; color:#ffd60a; border:1px solid #ffd60a;">11</div>
+                        <div class="player-name">伊兰加</div>
                     </div>
                 </div>
-
-                <!-- Match 4: Tunisia vs Japan (06-21 05:00) -->
-                <div class="match-card">
-                    <div class="match-meta">
-                        <span class="group-tag">小组赛 F 组</span>
-                        <span class="match-time">06-21 05:00 (未开始)</span>
+            </div>
+            
+            <!-- 右侧：AI预测分析 -->
+            <div class="detail-pane">
+                <div class="pane-title">🤖 AI 赛事预测报告</div>
+                <div class="prob-container">
+                    <div class="prob-bar">
+                        <div class="prob-segment" style="width: 46%; background: #00ff66;">46%</div>
+                        <div class="prob-segment" style="width: 28%; background: #a8a8a8;">28%</div>
+                        <div class="prob-segment" style="width: 26%; background: #38bdf8;">26%</div>
                     </div>
-                    <div class="match-vs">
-                        <div class="team-box">
-                            <span class="team-name">突尼斯 🇹🇳 <small style="font-size: 0.8rem; color: var(--accent-color); font-weight:normal;">(主)</small></span>
-                        </div>
-                        <span class="vs-divider">VS</span>
-                        <div class="team-box">
-                            <span class="team-name">日本 🇯🇵</span>
-                        </div>
-                    </div>
-
-                    <!-- Environment Info -->
-                    <div class="match-info-banner">
-                        <div class="info-item">
-                            <span class="info-label">比赛场地</span>
-                            <span class="info-value">蒙特雷球场 (Estadio BBVA)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">天气状况</span>
-                            <span class="info-value">多云 / 约 26°C (79°F)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">场馆类型</span>
-                            <span class="info-value">露天球场 / 天然草皮</span>
-                        </div>
-                    </div>
-
-                    <!-- Squad & Background Info -->
-                    <div class="squad-info-section">
-                        <div class="squad-col-title">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                            大名单关键人物与伤停背景
-                        </div>
-                        <p class="squad-desc-text">
-                            <strong>突尼斯大名单：</strong>主教练勒纳尔。核心包括后卫蒙特萨尔·塔尔比 (Montassar Talbi)、奥马尔·雷基克 (Omar Rekik)、中场斯希里 (Ellyes Skhiri)、前锋阿舒里 (Elias Achouri)。首场 1-5 惨败给瑞典队。<br>
-                            <strong>日本大名单：</strong>主教练森保一。主力包括门将铃木彩艳 (Zion Suzuki)、中场镰田大地 (Daichi Kamada)、前锋上田绮世 (Ayase Ueda)、堂安律 (Ritsu Doan)。首场 2-2 顽强逼平荷兰队。<br>
-                            <span style="color:#00ff66;">ℹ️ 伤停/情报：突尼斯主力中场赖因·赫迪拉 (Rani Khedira) 🟨 首轮身背一张黄牌，全队无新增伤病；日本队灵魂中场远藤航因伤退出世界杯，前锋久保建英因伤缺阵（由前田大然顶替首发）。</span>
-                        </p>
-                    </div>
-
-                    <div class="match-details">
-                        <div class="details-grid">
-                            <div class="detail-pane" style="overflow-x: auto;">
-                                <div class="pane-title">
-                                    📋 战术板预测阵容 (FotMob预测阵容)
-                                    <a href="https://www.fotmob.com/matches/japan-vs-tunisia/1hqd1q#4667785" target="_blank" style="margin-left: auto; font-size: 0.8rem; font-weight: normal; color: var(--accent-color); text-decoration: underline; display: inline-flex; align-items: center; gap: 2px;">
-                                        在 FotMob 查看可能的阵容
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                    </a>
-                                </div>
-                                <div class="soccer-pitch">
-                                    <!-- Field Markings -->
-                                    <div class="pitch-line midfield-line"></div>
-                                    <div class="midfield-circle"></div>
-                                    <div class="center-spot"></div>
-                                    <div class="pitch-line penalty-box-left"></div>
-                                    <div class="pitch-line penalty-box-right"></div>
-                                    
-                                    <!-- Team Labels -->
-                                    <div style="position:absolute; top:8px; left:12px; font-size:0.75rem; font-weight:bold; color:#d62828; z-index:2;">突尼斯 🇹🇳 (4-2-3-1)</div>
-                                    <div style="position:absolute; top:8px; right:12px; font-size:0.75rem; font-weight:bold; color:#002f6c; z-index:2;">日本 🇯🇵 (3-4-2-1)</div>
-
-                                    <!-- Tunisia Players (Home - Red) -->
-                                    <div class="player-node" style="left: 6%; top: 50%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">1</div><div class="player-name">沙马克</div></div>
-                                    <div class="player-node" style="left: 24%; top: 85%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">20</div><div class="player-name">瓦莱里</div></div>
-                                    <div class="player-node" style="left: 18%; top: 60%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">4</div><div class="player-name">雷基克</div></div>
-                                    <div class="player-node" style="left: 18%; top: 40%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">3</div><div class="player-name">塔尔比</div></div>
-                                    <div class="player-node" style="left: 24%; top: 15%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">2</div><div class="player-name">阿卜迪</div></div>
-                                    <div class="player-node" style="left: 28%; top: 62%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #ffcc00;">13</div><div class="player-name">赫迪拉 🟨</div></div>
-                                    <div class="player-node" style="left: 28%; top: 38%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">17</div><div class="player-name">斯希里</div></div>
-                                    <div class="player-node" style="left: 38%; top: 22%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">11</div><div class="player-name">加尔比</div></div>
-                                    <div class="player-node" style="left: 36%; top: 50%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">10</div><div class="player-name">梅布里</div></div>
-                                    <div class="player-node" style="left: 38%; top: 78%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">7</div><div class="player-name">阿舒里</div></div>
-                                    <div class="player-node" style="left: 45%; top: 50%;"><div class="player-circle" style="background:#d62828; color:#fff; border:1px solid #fff;">19</div><div class="player-name">肖瓦特</div></div>
-
-                                    <!-- Japan Players (Away - Blue) -->
-                                    <div class="player-node" style="left: 94%; top: 50%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">1</div><div class="player-name">铃木彩艳</div></div>
-                                    <div class="player-node" style="left: 84%; top: 28%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">16</div><div class="player-name">渡边刚</div></div>
-                                    <div class="player-node" style="left: 84%; top: 50%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">3</div><div class="player-name">谷口彰悟</div></div>
-                                    <div class="player-node" style="left: 84%; top: 72%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">21</div><div class="player-name">伊藤洋辉</div></div>
-                                    <div class="player-node" style="left: 76%; top: 15%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">2</div><div class="player-name">菅原由势</div></div>
-                                    <div class="player-node" style="left: 70%; top: 38%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">24</div><div class="player-name">佐野海舟</div></div>
-                                    <div class="player-node" style="left: 70%; top: 62%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">15</div><div class="player-name">镰田大地</div></div>
-                                    <div class="player-node" style="left: 76%; top: 85%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">13</div><div class="player-name">中村敬斗</div></div>
-                                    <div class="player-node" style="left: 62%; top: 35%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">10</div><div class="player-name">堂安律</div></div>
-                                    <div class="player-node" style="left: 58%; top: 50%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">18</div><div class="player-name">上田绮世</div></div>
-                                    <div class="player-node" style="left: 62%; top: 65%;"><div class="player-circle" style="background:#002f6c; color:#fff; border:1px solid #fff;">11</div><div class="player-name">前田大然</div></div>
-                                </div>
-                            </div>
-                            <div class="detail-pane">
-                                <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
-                                
-                                <div class="prob-container">
-                                    <div class="prob-labels">
-                                        <span>突尼斯 胜 (18%)</span>
-                                        <span>平局 (30%)</span>
-                                        <span>日本 胜 (52%)</span>
-                                    </div>
-                                    <div class="prob-bar">
-                                        <div class="prob-segment" style="width: 18%; background: var(--accent-color);"></div>
-                                        <div class="prob-segment" style="width: 30%; background: var(--text-muted);"></div>
-                                        <div class="prob-segment" style="width: 52%; background: var(--primary-color);"></div>
-                                    </div>
-                                </div>
-
-                                <div class="section-sub-title">让球指数预测 (突尼斯 +0.5)</div>
-                                <div>
-                                    <span class="recommendation-tag">首选：让平 (日本净胜1球刚好)</span>
-                                    <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：让负 (日本净胜2球+)</span>
-                                </div>
-
-                                <div class="section-sub-title">波胆/比分倾向</div>
-                                <div class="score-tags">
-                                    <span class="score-badge">稳胆 1-2</span>
-                                    <span class="score-badge">稳胆 0-1</span>
-                                    <span class="score-badge upset">防冷 1-1</span>
-                                    <span class="score-badge upset">防冷 0-2</span>
-                                </div>
-
-                                <div class="section-sub-title">核心战术要点</div>
-                                <ul class="factor-list">
-                                    <li>• 突尼斯换帅勒纳尔，勒纳尔擅长调教强硬防守与纪律性，本场必将坚守反击。</li>
-                                    <li>• 日本队前场中村敬斗与堂安律技术细腻，面对身体流防守能以小范围传切拉开空间。</li>
-                                    <li>• 晚间蒙特雷气温降至 26°C 凉爽怡人，有助于两队打出高速紧逼。</li>
-                                </ul>
-
-                                <p class="prediction-detail-text">
-                                    <strong>解说倾向：</strong>本场是极具看点与历史意义的世界杯第1000场正赛。突尼斯在遭瑞典5球屠杀后，迅速签下曾经带领沙特击败阿根廷的魔鬼教头勒纳尔，以求稳定更衣室。日本首轮战平荷兰底气十足，森保一很有可能派遣镰田大地首发以增强禁区前的威胁。勒纳尔的突尼斯防守专注度会有断崖式提升，但在日本队前田大然和镰田大地的个人能力碾压下，突尼斯防线恐也难保全身。日本胜算更大，预测 1-2 或 0-1 小胜。
-                                </p>
-                            </div>
-                        </div>
+                    <div class="prob-labels">
+                        <span>🇳🇱 荷兰 胜 (46%)</span>
+                        <span>🤝 平局 (28%)</span>
+                        <span>🇸🇪 瑞典 胜 (26%)</span>
                     </div>
                 </div>
+                
+                <div class="section-sub-title">让球指数预测</div>
+                <span class="recommendation-tag">首选：荷兰 0 (平手)</span>
+                <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：荷兰 -0.5 (让主胜)</span>
+                
+                <div class="section-sub-title">波胆/比分倾向</div>
+                <div class="score-tags">
+                    <span class="score-badge">2-1</span>
+                    <span class="score-badge">1-1</span>
+                    <span class="score-badge upset">2-2</span>
+                    <span class="score-badge upset">1-2</span>
+                </div>
+
+                <div class="section-sub-title">核心战术要点</div>
+                <ul class="factor-list">
+                    <li>德容复出搭档赖因德斯与赫拉芬贝赫，加强控球和由守转攻的推进效率。</li>
+                    <li>瑞典大胜后士气高涨，约克雷斯与伊兰加的双锋线冲击力将考验范戴克与范德文的防线。</li>
+                    <li>双方均防守有隐忧，荷兰近5场未零封，瑞典近12场未零封，此役大概率是一场对攻战。</li>
+                </ul>
+
+                <p class="prediction-detail-text">
+                    <strong>解说倾向：</strong>荷兰首轮战平日本，本场必须抢分，德容在中场的调度至关重要。瑞典首轮5-1大胜突尼斯锋线爆发，但防守端仍存在漏洞（近12场未零封）。此役两队均有较强进攻欲望，荷兰阵容实力稍占优势，预计荷兰能占据主动，但需防范瑞典的反击。推荐荷兰小胜或平局。
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="match-card">
+    <div class="match-meta">
+        <span class="group-tag">小组赛第 2 轮 · E 组</span>
+        <span class="match-time">2026-06-20 22:00</span>
+    </div>
+    
+    <div class="match-vs">
+        <div class="team-box">
+            <span class="team-name">🇩🇪 德国</span>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="team-box">
+            <span class="team-name">🇨🇮 科特迪瓦</span>
+        </div>
+    </div>
+
+    <div class="match-info-banner">
+        <div class="info-item">
+            <span class="info-label">🏟️ 比赛球场</span>
+            <span class="info-value">多伦多体育场 (Toronto Stadium)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌤️ 气候气温</span>
+            <span class="info-value">多云 / 21°C</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌿 场馆草皮</span>
+            <span class="info-value">露天 · 天然草</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">⚖️ 主裁判</span>
+            <span class="info-value">胡安·加布里埃尔·贝尼特斯·马雷科 (巴拉圭)</span>
+        </div>
+    </div>
+
+    <div class="squad-info-section">
+        <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+        <p class="squad-desc-text">
+            <strong>德国</strong>：维尔茨与穆夏拉双子星状态正佳，首发阵容无伤停，哈弗茨继续出任‘假9’前锋。
+            <br>
+            <strong>科特迪瓦</strong>：凯西与塞科·福法纳搭档双后腰，防守硬度高，博尼与佩佩搭档锋线，首发阵容整齐。
+        </p>
+    </div>
+
+    <!-- 更衣室晴雨表 & 舆情哨 -->
+    <div class="dressing-room-barometer">
+        <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+        <div class="barometer-grid">
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇩🇪 德国</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 95%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 95%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">9.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 65%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 10%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 95%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.5</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-green">🟢 正常出征</div>
+            </div>
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇨🇮 科特迪瓦</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 50%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">5.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 15%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-green">🟢 正常出征</div>
+            </div>
+        </div>
+        <div class="scout-brief">
+            <div class="scout-title">📡 舆情哨情报简报</div>
+            <div class="scout-content">
+                <span class="scout-tag status-green"> Germany: 穆夏拉与维尔茨小范围传递极具威胁，但高位压迫防线防空能力稍弱。</span>
+                <span class="scout-tag status-green"> Ivory Coast: 目前豪取各项赛事十连胜，防守极坚固，反击依靠迪亚洛和佩佩的速度。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="match-details">
+        <div class="details-grid">
+            <!-- 左侧：战术板 -->
+            <div class="detail-pane">
+                <div class="pane-title">
+                    <a href="https://www.fotmob.com/matches/ivory-coast-vs-germany/1xi59e#4667780" target="_blank">
+                        📋 战术板预测阵容 (德国 4-2-3-1 vs 4-4-2 科特迪瓦 🔗)
+                    </a>
+                </div>
+                <div class="soccer-pitch">
+                    <div class="pitch-line midfield-line"></div>
+                    <div class="pitch-line midfield-circle"></div>
+                    <div class="pitch-line center-spot"></div>
+                    <div class="pitch-line penalty-box-left"></div>
+                    <div class="pitch-line penalty-box-right"></div>
+                    
+                    <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">1</div>
+                        <div class="player-name">诺伊尔</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 87.500%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">6</div>
+                        <div class="player-name">基米希</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 62.500%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">4</div>
+                        <div class="player-name">塔</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 37.500%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">15</div>
+                        <div class="player-name">施洛特贝克</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 12.500%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">18</div>
+                        <div class="player-name">布朗</div>
+                    </div>
+                    <div class="player-node" style="left: 23.924%; top: 70.000%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">23</div>
+                        <div class="player-name">恩梅查</div>
+                    </div>
+                    <div class="player-node" style="left: 23.924%; top: 30.000%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">5</div>
+                        <div class="player-name">帕夫洛维奇</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 83.700%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">19</div>
+                        <div class="player-name">萨内</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">10</div>
+                        <div class="player-name">穆夏拉</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 16.300%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">17</div>
+                        <div class="player-name">维尔茨</div>
+                    </div>
+                    <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ffffff; color:#000000; border:1px solid #000000;">7</div>
+                        <div class="player-name">哈弗茨</div>
+                    </div>
+                    
+                    <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">1</div>
+                        <div class="player-name">Y.福法纳</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 12.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">17</div>
+                        <div class="player-name">杜埃 🟨</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 37.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">5</div>
+                        <div class="player-name">辛戈</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 62.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">21</div>
+                        <div class="player-name">恩迪卡</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 87.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">3</div>
+                        <div class="player-name">科南</div>
+                    </div>
+                    <div class="player-node" style="left: 70.092%; top: 12.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">15</div>
+                        <div class="player-name">迪亚洛</div>
+                    </div>
+                    <div class="player-node" style="left: 70.092%; top: 37.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">8</div>
+                        <div class="player-name">凯西 🟨</div>
+                    </div>
+                    <div class="player-node" style="left: 70.092%; top: 62.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">6</div>
+                        <div class="player-name">S.福法纳 🟨</div>
+                    </div>
+                    <div class="player-node" style="left: 70.092%; top: 87.500%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">11</div>
+                        <div class="player-name">迪奥曼德</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 30.000%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">19</div>
+                        <div class="player-name">佩佩</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 70.000%;">
+                        <div class="player-circle" style="background:#118a44; color:#ffffff; border:1px solid #f77f00;">9</div>
+                        <div class="player-name">博尼</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：AI预测分析 -->
+            <div class="detail-pane">
+                <div class="pane-title">🤖 AI 赛事预测报告</div>
+                <div class="prob-container">
+                    <div class="prob-bar">
+                        <div class="prob-segment" style="width: 58%; background: #00ff66;">58%</div>
+                        <div class="prob-segment" style="width: 24%; background: #a8a8a8;">24%</div>
+                        <div class="prob-segment" style="width: 18%; background: #38bdf8;">18%</div>
+                    </div>
+                    <div class="prob-labels">
+                        <span>🇩🇪 德国 胜 (58%)</span>
+                        <span>🤝 平局 (24%)</span>
+                        <span>🇨🇮 科特迪瓦 胜 (18%)</span>
+                    </div>
+                </div>
+                
+                <div class="section-sub-title">让球指数预测</div>
+                <span class="recommendation-tag">首选：德国 -1 (让主胜)</span>
+                <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：科特迪瓦 +1 (让平/客胜)</span>
+                
+                <div class="section-sub-title">波胆/比分倾向</div>
+                <div class="score-tags">
+                    <span class="score-badge">2-0</span>
+                    <span class="score-badge">2-1</span>
+                    <span class="score-badge upset">1-1</span>
+                    <span class="score-badge upset">1-0</span>
+                </div>
+
+                <div class="section-sub-title">核心战术要点</div>
+                <ul class="factor-list">
+                    <li>德军“维尔茨+穆夏拉”双子星首轮默契十足，但科特迪瓦中场凯西与福法纳防守硬度高。</li>
+                    <li>科特迪瓦防守极其坚固（首轮零封厄瓜多尔），纳帅的高位防线需防范阿马德·迪亚洛的反击速度。</li>
+                    <li>德国首轮大胜含金量存疑，此役面对十连胜的非洲大象是检验穆夏拉强对抗恢复的硬仗。</li>
+                </ul>
+
+                <p class="prediction-detail-text">
+                    <strong>解说倾向：</strong>德国首轮7-1横扫库拉索，维尔茨 and 穆夏拉的双子星光芒四射，但此役才是硬仗。科特迪瓦首轮1-0力力克厄瓜多尔，防守防线非常坚固，目前处于各项赛事十连胜。凯西和塞科·福法纳组成的中场硬度极高，将极大限制德国的地面渗透。预计德国仍能占据主导并小胜，但需防范大象的反击。
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="match-card">
+    <div class="match-meta">
+        <span class="group-tag">小组赛第 2 轮 · E 组</span>
+        <span class="match-time">2026-06-21 02:00</span>
+    </div>
+    
+    <div class="match-vs">
+        <div class="team-box">
+            <span class="team-name">🇪🇨 厄瓜多尔</span>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="team-box">
+            <span class="team-name">🇨🇼 库拉索</span>
+        </div>
+    </div>
+
+    <div class="match-info-banner">
+        <div class="info-item">
+            <span class="info-label">🏟️ 比赛球场</span>
+            <span class="info-value">堪萨斯城体育场 (Kansas City Stadium)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌤️ 气候气温</span>
+            <span class="info-value">多云 / 27°C</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌿 场馆草皮</span>
+            <span class="info-value">露天 · 天然草</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">⚖️ 主裁判</span>
+            <span class="info-value">马宁 (中国)</span>
+        </div>
+    </div>
+
+    <div class="squad-info-section">
+        <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+        <p class="squad-desc-text">
+            <strong>厄瓜多尔</strong>：凯塞多坐镇中场掌控节奏，锋线老将瓦伦西亚突前，叶博亚与普拉塔提供边路冲击力。
+            <br>
+            <strong>库拉索</strong>：中后防线由巴佐尔与奥比斯波搭档，塔希斯·钟担任进攻核心，首场惨败后士气落后。
+        </p>
+    </div>
+
+    <!-- 更衣室晴雨表 & 舆情哨 -->
+    <div class="dressing-room-barometer">
+        <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+        <div class="barometer-grid">
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇪🇨 厄瓜多尔</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 60%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 10%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-green">🟢 正常出征</div>
+            </div>
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇨🇼 库拉索</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 65%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 65%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 55%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">5.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 20%; background:#00ff66;"></div></div>
+                        <span class="meter-score">2.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 60%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.0</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-yellow">🟡 注意风险</div>
+            </div>
+        </div>
+        <div class="scout-brief">
+            <div class="scout-title">📡 舆情哨情报简报</div>
+            <div class="scout-content">
+                <span class="scout-tag status-green"> Ecuador: 首轮告负本场必须抢大胜拿净胜球，整体实力和身体对抗完胜库拉索。</span>
+                <span class="scout-tag status-yellow"> Curacao: 首轮惨吞7弹防守崩溃，本场立足防守，进攻依靠塔希斯·钟的个人突击。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="match-details">
+        <div class="details-grid">
+            <!-- 左侧：战术板 -->
+            <div class="detail-pane">
+                <div class="pane-title">
+                    <a href="https://www.fotmob.com/matches/ecuador-vs-curacao/jy3jhs3#4667779" target="_blank">
+                        📋 战术板预测阵容 (厄瓜多尔 4-2-3-1 vs 4-3-3 库拉索 🔗)
+                    </a>
+                </div>
+                <div class="soccer-pitch">
+                    <div class="pitch-line midfield-line"></div>
+                    <div class="pitch-line midfield-circle"></div>
+                    <div class="pitch-line center-spot"></div>
+                    <div class="pitch-line penalty-box-left"></div>
+                    <div class="pitch-line penalty-box-right"></div>
+                    
+                    <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">1</div>
+                        <div class="player-name">加林德斯</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 87.500%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">17</div>
+                        <div class="player-name">普雷西亚多</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 62.500%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">6</div>
+                        <div class="player-name">帕乔</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 37.500%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">4</div>
+                        <div class="player-name">奥尔多涅斯</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 12.500%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">3</div>
+                        <div class="player-name">因卡皮耶</div>
+                    </div>
+                    <div class="player-node" style="left: 23.924%; top: 70.000%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">23</div>
+                        <div class="player-name">凯塞多</div>
+                    </div>
+                    <div class="player-node" style="left: 23.924%; top: 30.000%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">21</div>
+                        <div class="player-name">弗兰科</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 83.700%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">9</div>
+                        <div class="player-name">叶博亚</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">15</div>
+                        <div class="player-name">维特</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 16.300%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">19</div>
+                        <div class="player-name">普拉塔</div>
+                    </div>
+                    <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ffd166; color:#073b4c; border:1px solid #ef476f;">13</div>
+                        <div class="player-name">瓦伦西亚</div>
+                    </div>
+                    
+                    <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">1</div>
+                        <div class="player-name">鲁姆</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 12.500%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">5</div>
+                        <div class="player-name">弗洛拉纳斯</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 37.500%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">23</div>
+                        <div class="player-name">巴佐尔</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 62.500%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">18</div>
+                        <div class="player-name">奥比斯波</div>
+                    </div>
+                    <div class="player-node" style="left: 82.060%; top: 87.500%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">24</div>
+                        <div class="player-name">丰维尔</div>
+                    </div>
+                    <div class="player-node" style="left: 70.092%; top: 21.000%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">8</div>
+                        <div class="player-name">科梅嫩西亚</div>
+                    </div>
+                    <div class="player-node" style="left: 70.092%; top: 50.000%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">10</div>
+                        <div class="player-name">L.巴库纳</div>
+                    </div>
+                    <div class="player-node" style="left: 70.092%; top: 79.000%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">7</div>
+                        <div class="player-name">J.巴库纳</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 21.000%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">21</div>
+                        <div class="player-name">钟塔西</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 50.000%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">9</div>
+                        <div class="player-name">洛卡迪亚</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 79.000%;">
+                        <div class="player-circle" style="background:#0a4e76; color:#ffffff; border:1px solid #ffd166;">12</div>
+                        <div class="player-name">汉森</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：AI预测分析 -->
+            <div class="detail-pane">
+                <div class="pane-title">🤖 AI 赛事预测报告</div>
+                <div class="prob-container">
+                    <div class="prob-bar">
+                        <div class="prob-segment" style="width: 78%; background: #00ff66;">78%</div>
+                        <div class="prob-segment" style="width: 15%; background: #a8a8a8;">15%</div>
+                        <div class="prob-segment" style="width: 7%; background: #38bdf8;">7%</div>
+                    </div>
+                    <div class="prob-labels">
+                        <span>🇪🇨 厄瓜多尔 胜 (78%)</span>
+                        <span>🤝 平局 (15%)</span>
+                        <span>🇨🇼 库拉索 胜 (7%)</span>
+                    </div>
+                </div>
+                
+                <div class="section-sub-title">让球指数预测</div>
+                <span class="recommendation-tag">首选：厄瓜多尔 -1.5 (让主胜)</span>
+                <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：厄瓜多尔 -2 (让主平/胜)</span>
+                
+                <div class="section-sub-title">波胆/比分倾向</div>
+                <div class="score-tags">
+                    <span class="score-badge">2-0</span>
+                    <span class="score-badge">3-0</span>
+                    <span class="score-badge upset">3-1</span>
+                    <span class="score-badge upset">4-0</span>
+                </div>
+
+                <div class="section-sub-title">核心战术要点</div>
+                <ul class="factor-list">
+                    <li>厄瓜多尔首场失利后此役必须抢分并争取净胜球，凯塞多在中场的拦截与压迫将是进攻发起点。</li>
+                    <li>库拉索首轮被德国7球血洗防线崩溃，中后卫巴佐尔与奥比斯波的防空和防快攻上面临巨大压力。</li>
+                    <li>厄瓜多尔边路叶博亚与普拉塔的突破能力极强，将直接冲击库拉索薄弱的边路防守。</li>
+                </ul>
+
+                <p class="prediction-detail-text">
+                    <strong>解说倾向：</strong>厄瓜多尔首轮0-1负于科特迪瓦，本场面对小组最弱对手库拉索必须全取三分并多拿净胜球。凯塞多领衔的中场实力远胜对手。库拉索首场1-7惨败德国，防守极其混乱，中后防线暴露出极大空当。马宁主裁执法尺度严厉，库拉索防守粗暴或招致黄红牌。预计厄瓜多尔从比赛一开始就将大举压上，取得一场大胜。
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="match-card">
+    <div class="match-meta">
+        <span class="group-tag">小组赛第 2 轮 · F 组</span>
+        <span class="match-time">2026-06-21 06:00</span>
+    </div>
+    
+    <div class="match-vs">
+        <div class="team-box">
+            <span class="team-name">🇹🇳 突尼斯</span>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="team-box">
+            <span class="team-name">🇯🇵 日本</span>
+        </div>
+    </div>
+
+    <div class="match-info-banner">
+        <div class="info-item">
+            <span class="info-label">🏟️ 比赛球场</span>
+            <span class="info-value">蒙特雷体育场 (Monterrey Stadium)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌤️ 气候气温</span>
+            <span class="info-value">多云 / 26°C</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌿 场馆草皮</span>
+            <span class="info-value">露天 · 天然草</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">⚖️ 主裁判</span>
+            <span class="info-value">伊斯特万·科瓦奇 (罗马尼亚)</span>
+        </div>
+    </div>
+
+    <div class="squad-info-section">
+        <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+        <p class="squad-desc-text">
+            <strong>突尼斯</strong>：火线更换主帅为勒纳尔，战术重塑向低位防反转型，首发阵容变动较大以稳固防守。
+            <br>
+            <strong>日本</strong>：远藤航和久保建英确认伤缺，佐野海舟首发搭档镰田大地，前田大然与堂安律两翼策应。
+        </p>
+    </div>
+
+    <!-- 更衣室晴雨表 & 舆情哨 -->
+    <div class="dressing-room-barometer">
+        <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+        <div class="barometer-grid">
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇹🇳 突尼斯</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#00ff66;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 70%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">7.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#ff4444;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 10%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 40%; background:#ff4444;"></div></div>
+                        <span class="meter-score">4.0</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-yellow">🟡 注意风险</div>
+            </div>
+            <div class="barometer-team">
+                <div class="barometer-team-name">🇯🇵 日本</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 95%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 55%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">5.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 60%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-yellow">🟡 注意风险</div>
+            </div>
+        </div>
+        <div class="scout-brief">
+            <div class="scout-title">📡 舆情哨情报简报</div>
+            <div class="scout-content">
+                <span class="scout-tag status-yellow"> Tunisia: 勒纳尔执教重塑战术体系，战术稳定性存在隐患（评定为4.0）。</span>
+                <span class="scout-tag status-yellow"> Japan: 远藤航、久保建英伤缺对防守和进攻是极大打击，中场防守硬度明显下滑。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="match-details">
+        <div class="details-grid">
+            <!-- 左侧：战术板 -->
+            <div class="detail-pane">
+                <div class="pane-title">
+                    <a href="https://www.fotmob.com/matches/japan-vs-tunisia/1hqd1q#4667785" target="_blank">
+                        📋 战术板预测阵容 (突尼斯 4-2-3-1 vs 3-4-2-1 日本 🔗)
+                    </a>
+                </div>
+                <div class="soccer-pitch">
+                    <div class="pitch-line midfield-line"></div>
+                    <div class="pitch-line midfield-circle"></div>
+                    <div class="pitch-line center-spot"></div>
+                    <div class="pitch-line penalty-box-left"></div>
+                    <div class="pitch-line penalty-box-right"></div>
+                    
+                    <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">1</div>
+                        <div class="player-name">沙马克</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 87.500%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">20</div>
+                        <div class="player-name">瓦莱里</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 62.500%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">4</div>
+                        <div class="player-name">雷基克</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 37.500%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">3</div>
+                        <div class="player-name">塔尔比</div>
+                    </div>
+                    <div class="player-node" style="left: 14.901%; top: 12.500%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">2</div>
+                        <div class="player-name">阿卜迪</div>
+                    </div>
+                    <div class="player-node" style="left: 23.924%; top: 70.000%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">13</div>
+                        <div class="player-name">赫迪拉 🟨</div>
+                    </div>
+                    <div class="player-node" style="left: 23.924%; top: 30.000%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">17</div>
+                        <div class="player-name">斯希里</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 83.700%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">7</div>
+                        <div class="player-name">阿舒里</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">10</div>
+                        <div class="player-name">汉尼拔</div>
+                    </div>
+                    <div class="player-node" style="left: 32.947%; top: 16.300%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">11</div>
+                        <div class="player-name">加尔比</div>
+                    </div>
+                    <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                        <div class="player-circle" style="background:#ef476f; color:#ffffff; border:1px solid #ffffff;">19</div>
+                        <div class="player-name">肖瓦特</div>
+                    </div>
+                    
+                    <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">1</div>
+                        <div class="player-name">铃木彩艳</div>
+                    </div>
+                    <div class="player-node" style="left: 85.099%; top: 21.000%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">16</div>
+                        <div class="player-name">渡边刚</div>
+                    </div>
+                    <div class="player-node" style="left: 85.099%; top: 50.000%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">3</div>
+                        <div class="player-name">谷口彰悟</div>
+                    </div>
+                    <div class="player-node" style="left: 85.099%; top: 79.000%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">21</div>
+                        <div class="player-name">伊藤洋辉</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 12.500%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">2</div>
+                        <div class="player-name">菅原由势</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 37.500%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">24</div>
+                        <div class="player-name">佐野海舟</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 62.500%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">15</div>
+                        <div class="player-name">镰田大地</div>
+                    </div>
+                    <div class="player-node" style="left: 76.076%; top: 87.500%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">13</div>
+                        <div class="player-name">中村敬斗</div>
+                    </div>
+                    <div class="player-node" style="left: 67.053%; top: 30.000%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">10</div>
+                        <div class="player-name">堂安律</div>
+                    </div>
+                    <div class="player-node" style="left: 67.053%; top: 70.000%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">11</div>
+                        <div class="player-name">前田大然</div>
+                    </div>
+                    <div class="player-node" style="left: 58.078%; top: 50.000%;">
+                        <div class="player-circle" style="background:#001d3d; color:#ffffff; border:1px solid #ffd60a;">18</div>
+                        <div class="player-name">上田绮世</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：AI预测分析 -->
+            <div class="detail-pane">
+                <div class="pane-title">🤖 AI 赛事预测报告</div>
+                <div class="prob-container">
+                    <div class="prob-bar">
+                        <div class="prob-segment" style="width: 18%; background: #00ff66;">18%</div>
+                        <div class="prob-segment" style="width: 26%; background: #a8a8a8;">26%</div>
+                        <div class="prob-segment" style="width: 56%; background: #38bdf8;">56%</div>
+                    </div>
+                    <div class="prob-labels">
+                        <span>🇹🇳 突尼斯 胜 (18%)</span>
+                        <span>🤝 平局 (26%)</span>
+                        <span>🇯🇵 日本 胜 (56%)</span>
+                    </div>
+                </div>
+                
+                <div class="section-sub-title">让球指数预测</div>
+                <span class="recommendation-tag">首选：日本 -0.75 (让客胜)</span>
+                <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：突尼斯 +1 (让主平/胜)</span>
+                
+                <div class="section-sub-title">波胆/比分倾向</div>
+                <div class="score-tags">
+                    <span class="score-badge">0-1</span>
+                    <span class="score-badge">0-2</span>
+                    <span class="score-badge upset">0-0</span>
+                    <span class="score-badge upset">1-1</span>
+                </div>
+
+                <div class="section-sub-title">核心战术要点</div>
+                <ul class="factor-list">
+                    <li>突尼斯首轮惨败后解雇教练，勒纳尔火线接任，本场战术将全面转向低位防守反击。</li>
+                    <li>日本核心远藤航与久保建英伤缺，佐野海舟搭档镰田大地，防守硬度下降但推进速度更快。</li>
+                    <li>日本队首轮暴露出的下半场体能下滑隐忧本场在高温下可能被放大，必须合理分配体能。</li>
+                </ul>
+
+                <p class="prediction-detail-text">
+                    <strong>解说倾向：</strong>突尼斯首轮1-5大败给瑞典后火线换帅，传奇教练勒纳尔紧急接手，预计本场将采取极为保守的低位防守反击策略。日本队首轮2-2逼平荷兰表现出色，但主力后腰远藤航和攻击核心久保建英的伤缺对球队攻守两端是重大打击。佐野海舟与镰田大地搭档中场虽有速度，但硬度有所欠缺。日本队首轮暴露出的下半场体能下滑隐忧本场在高温下可能被放大。预计日本仍能通过精细的技术控球占据优势，但面对勒纳尔的防守体系，需防范闷平或被反击。
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
             </div>
         </main>
