@@ -1,62 +1,78 @@
 # 2026 世界杯 AI 预测与比赛实战日志 (World Cup 2026 Predictor)
 
-这是一个用于 2026 年美加墨世界杯的 AI 预测、首发战术板以及比赛实战日志的可视化看板系统。通过美观的深色玻璃拟态（Glassmorphism）响应式 HTML 页面，展示每日比赛的实时阵容、气象环境、伤停情报及胜平负概率分析。
+这是一个用于 2026 年美加墨世界杯的 AI 预测、首发战术板以及比赛实战日志的可视化看板系统。通过美观的深色玻璃拟态（Glassmorphism）响应式 HTML 页面，展示每日比赛的实时阵容、气象环境、舆情伤停情报及胜平负概率分析。
 
 > [!IMPORTANT]
-> **起始时间声明**：本项目的预测日志和实战记录并非从第一天开始，而是正式起步于 **2026-06-18**（即小组赛第二轮开始）。
+> **起始时间声明**：本项目的预测日志和实战记录正式起步于 **2026-06-20**（即小组赛第二轮中后阶段，EF组第二轮赛事起）。所有较早期的测试历史数据及文件夹已做清理，确保预测看板聚焦于最准确的情报输入。
 
 ---
 
-## ⚽ 预测方法论
+## 🔄 数据与舆情预测决策环路 (Prediction Loop)
 
-本项目的 AI 预测分析均基于以下多维度权重的综合研判：
-
-1. **近期状态 (40%)**：预选赛战绩、本届赛事已赛表现、核心球员近况与伤病伤停。
-2. **球队硬实力 (30%)**：阵容厚度、FIFA 世界排名档次、历史大赛底蕴与冠军光环。
-3. **历史交锋 (15%)**：两支球队的历史对战记录与心理克制因素。
-4. **情境与环境 (15%)**：东道主主场优势（美/加/墨三队）、气候气温、球场草皮类型、淘汰赛抗压经验及阵容年龄结构。
-
----
-
-## 🔄 数据与舆情预测闭环 (Prediction Loop)
-
-为了进一步榨干数据价值并排除非结构化信息的噪声，项目于 **2026-06-20** 引入了 **v2.0 增强型预测闭环流程**。该流程要求 AI 在生成每日比赛前瞻时必须严格执行四个阶段的深度分析：
+项目引入了 **v2.0 增强型预测决策环路流程**。该流程要求 AI 在生成每日比赛前瞻时必须严格执行四个阶段的深度分析：
 
 ```mermaid
 graph TD
-    A["阶段一：专业数据深挖"] -->|多维数据定锚| B["阶段二：场外雷达吃瓜"]
-    B -->|更衣室/伤停舆情| C["阶段三：信息融汇与校准"]
-    C -->|基础概率 × 修正因子| D["阶段四：视觉面板输出"]
+    A["阶段一：专业数据深挖<br>(xG/xGA/逼抢强度/海拔气温)"] -->|多维数据定锚| B["阶段二：更衣室舆情雷达<br>(爆料源/内讧系数/伤停)"]
+    B -->|修正因子校准| C["阶段三：内存动态翻译<br>(主裁/球场/球员中译)"]
+    C -->|模版编译与校验| D["阶段四：可视化看板发布<br>(HTML卡片/双指缩放)"]
 ```
 
-### 1. 阶段一：专业数据深挖 (Deep Data Mining)
-* **FotMob 深度指标**：不只看阵容本身，重点监控近 5 场球员评分走势、团队期望进球与失球（xG/xGA）、前场传切热力图、Possession won final 3rd（前场夺回球权，作为高位逼抢强度指标）以及换人效率。
-* **FIFA 官方赛程与裁判环境**：查阅全场环境、球场海拔高度、气温和主裁判的执法尺度与给牌率。
-
-### 2. 阶段二：场外雷达与舆情吃瓜 (Off-Pitch Barometer)
-* **更衣室风波与内讧**：使用结构化检索指令抓取 L'Équipe、The Athletic、Marca 等媒体最新随队记者内幕，剥离隐形软实力折扣。
-* **伤停真假烟雾弹**：针对赛前发布会主帅抛出的烟雾弹，实行“双一级信源印证”规则，保证战术板置灰准确度。
-* **环境应激与气温**：关注极端气温雨雪天气、高海拔球场环境对体能消耗及控球打法带来的状态应激。
-
-### 3. 阶段三：信息融汇与概率校准 (Synthesis & Calibration)
-* **用数据定锚，用情报调偏**：结合阶段一的硬数据算得基础胜平负概率，然后用阶段二的舆情数据进行修正。
-* **情境因子微调**：针对 ≥32°C 高温（高压逼抢队概率下调）、高海拔（非本洲球队负向修正）等进行参数级修正。
-* **国别内讧体质校准**：依据历史大赛内讧数据（如法国内讧下调 15%，比利时下调 10%-12%，而荷兰/东亚球队轻微扣减），实现定量修正而非盲猜。
-
-### 4. 阶段四：视觉面板输出 (UI Visualization)
-* **更衣室晴雨表 & 舆情哨**：在每日比赛面板卡片中新增可视化图表挂件。包括**凝聚力、关键球员、外部压力、伤停风险、战术稳定性** 5 维度雷达雷区条形图，自动输出 `🟢正常出征`、`🟡注意风险`、`🔴高度警戒` 定性。
+1. **阶段一：专业数据深挖**：解析 FotMob 期望进球 (xG)、传球成功率、前场夺回球权逼抢压力、历史战绩与主裁尺度。
+2. **阶段二：场外舆情雷达**：追踪 The Athletic、队报等权威渠道更衣室情报，代入特定国别内讧打折率（如法国内讧下调 15%，比利时下调 10%-12%）微调胜率底牌。
+3. **阶段三：内存动态翻译**：完全在模型内存中进行球员、主裁和球场的中文翻译与映射，拒绝硬编码映射文件以保证系统纯净度。
+4. **阶段四：可视化面板输出**：根据 [match_day_template.html](file:///Users/ky230/Desktop/FF2026/reference/match_day_template.html) 编译，通过校验脚本后合并并更新主控制台。
 
 ---
 
-## 📂 项目目录结构
+## 📂 项目结构与文件依赖关系 (Dependencies & Architecture)
 
-* `skill.md`：核心 Agent 技能文档（绿茵神算工作手册），规定了首发定位规则、AI预测面板比例和编写规范。
-* `reference/`：
-  * `data_sources.md`：官方赛程与实时名单参考数据源整理，供人类或 AI 开发者快速查阅。
-* `index.html`：主控制台（提供各比赛日卡片入口）。
-* `2026-06-18/index.html`：6月18/19日比赛日预测看板。
-* `2026-06-19/index.html`：6月19/20日比赛日预测看板。
-* `2026-06-20/index.html`：6月20/21日比赛日预测看板（含突尼斯换帅与远藤航伤退情报）。
+本项目保持极其干净的无冗余设计，取消了任何硬编码的静态翻译映射表。文件依赖和数据流关系如下：
+
+### 1. 目录结构树
+
+```
+Repository Structure:
+├── index.html                           # 主控制台 (汇总卡片与决策环路入口)
+├── skill.md                             # AI Agent 技能工作手册
+├── README.md                            # 项目文档与依赖说明
+├── reference/
+│   ├── match_day_template.html          # 空白比赛日 HTML 模版 (含更衣室晴雨表骨架)
+│   ├── html_specification.md            # HTML/CSS 定位与排版规范
+│   ├── data_sources.md                  # 数据抓取源链接及检索 Query 模板
+│   └── teams_database.json              # [Git跟踪] 48 支球队的官方中文译名、国旗及球衣配色库
+├── scripts/
+│   ├── fetch_match_details.py           # 抓取 FotMob 单场首发/天气/H2H 并导出 JSON
+│   ├── fetch_league_table.py            # 抓取最新小组 standings 积分榜导出 JSON
+│   └── verify_matchday_html.py          # 编译质量审计脚本 (检测页面占位符/模版注释残留)
+└── 2026-06-20/                          # 6月20日比赛日预测包 (样例)
+    ├── index.html                       # 动态编译出的比赛日预测可视化看板
+    └── json/                            # [Git忽略] 存放爬虫抓取的原始数据 JSON
+        ├── standings.json               # 小组 standings 详情
+        ├── netherlands_vs_sweden.json   # 荷兰 vs 瑞典 详情
+        ├── germany_vs_ivory_coast.json  # 德国 vs 科特迪瓦 详情
+        ├── ecuador_vs_curacao.json      # 厄瓜多尔 vs 库拉索 详情
+        └── tunisia_vs_japan.json        # 突尼斯 vs 日本 详情
+```
+
+### 2. 数据流与编译依赖关系
+
+```mermaid
+flowchart LR
+    FotMobAPI[(FotMob API)] -->|爬虫脚本| ScrapedJSONs["2026-06-XX/json/*.json"]
+    TeamsDB["reference/teams_database.json"] -->|球队元数据| AIMemory{AI Model Memory}
+    ScrapedJSONs -->|字段解析与分析| AIMemory
+    AIMemory -->|在内存中动态翻译与预测计算| AIMemory
+    Template["reference/match_day_template.html"] -->|结构与样式克隆| CompiledHTML["2026-06-XX/index.html"]
+    AIMemory -->|将渲染数据直接填入占位符| CompiledHTML
+    CompiledHTML -->|验证脚本审计| VerifyScript{verify_matchday_html.py}
+    VerifyScript -->|SUCCESS| Production[主控制台 index.html 链接上线]
+```
+
+* **爬取依赖**：运行 `fetch_match_details.py` 与 `fetch_league_table.py` 将最新数据保存至 `[date]/json/` 文件夹下。由于配置了 `.gitignore`，这些原始 JSON 数据不会提交至 Git 仓库。
+* **数据映射依赖**：编译时，AI 从 [teams_database.json](file:///Users/ky230/Desktop/FF2026/reference/teams_database.json) 中匹配各国家队国旗及主客场球衣颜色，并将英文球员名、裁判名翻译为中文。
+* **模版编译依赖**：克隆 [match_day_template.html](file:///Users/ky230/Desktop/FF2026/reference/match_day_template.html)，填入编译好的 HTML 块并清除底部的 Agent 专用注释。
+* **审计依赖**：生成 HTML 后，必须运行 `verify_matchday_html.py` 实施自动化校验，检查是否存在占位符遗漏。
 
 ---
 

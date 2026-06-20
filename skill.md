@@ -39,13 +39,17 @@
 ### 【阶段一】专业数据深挖 · 锚定基础实力
 
 **执行原则**：不只看阵容本身，重点分析「形势层」。对每场比赛，依次查阅以下具体数据页面与指标：
-1. **FotMob 核心指标与页面查询**：对对阵双方在数据手册中查找具体的 FotMob URL：
-   - **赛程与预计首发 (🚨 最关键的开局首步)**：打开 [data_sources.md](file:///Users/ky230/Desktop/FF2026/reference/data_sources.md) 指引的 Fixtures by Date 找到对应 Match Details 页面。**这是整个 Loop 最核心的第一步，Agent 必须通过此页面彻底搞清楚当前在预测哪两个队、开球时间，以及可能的预计首发阵容与伤停**。核对首发阵容、伤停名单、近 5 场两队球员评分走势。**在此页面中的 H2H (Head-to-head) 栏目中检索两队的历史交锋战绩（🚨 历史交锋限制：必须过滤掉年份超过 5 年的交手记录，只参考最近 5 年之内的对决，超过 5 年的记录没有参考价值）**。**生成的 HTML 面板中的首发阵型、球员姓名与位置，必须与 FotMob 网页上所看到的完全保持一致，做到“网站所见即面板所见”，绝对不允许出现名字错位或颠倒**。
+
+1. **FotMob 核心指标与页面查询**：对对阵双方在数据手册中查找具体的 FotMob URL，**首选且唯一的抓取手段是运行仓库内置脚本，严禁使用慢速的浏览器子代理**：
+   - **单场详细数据抓取**：运行 [fetch_match_details.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_match_details.py) 脚本：`python3 scripts/fetch_match_details.py <match_url> <date_dir>/json`。脚本会自动请求网页，解析 HTML 中的 `<script id="__NEXT_DATA__">`，并将包含首发名单与 xy 战术板坐标、裁判、实时天气、近期状态（Form）、缺阵伤停、Insights 事实和 H2H 等信息的 JSON 写入对应的 `date/json` 文件夹。
+   - **小组实时排名抓取**：运行 [fetch_league_table.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_league_table.py) 脚本：`python3 scripts/fetch_league_table.py <date_dir>/json`。脚本会自动抓取世界杯最新的全小组积分榜及“成绩最好的小组第三”数据，写入 `<date_dir>/json/standings.json`。**必须根据小组实时排名（如队伍是否急需拿分出线、是立足打防反还是大比分血拼）以及小组赛轮次，在 AI 预测报告中定性研判各队的战意与血拼程度**。
+   - **生成的 HTML 面板中的首发阵型、球员姓名与位置，必须与 FotMob JSON 数据完全保持一致，做到“JSON 坐标所见即面板所见”，绝对不允许出现位置错位或颠倒**。
    - **球员多维数据**：打开 [data_sources.md](file:///Users/ky230/Desktop/FF2026/reference/data_sources.md) 指引的 [球员统计数据](https://www.fotmob.com/leagues/77/stats/world-cup/players) 及其子项直达链接（包含进球 Goals、助攻 Assists、期望进球 xG、期望助攻 xA、创造重大机会 Big chances created 与 FotMob 评分），核对两队核心球员的个人数据，以定性分析球星战力。
    - **团队攻防战术**：打开 [data_sources.md](file:///Users/ky230/Desktop/FF2026/reference/data_sources.md) 指引的 [球队统计数据](https://www.fotmob.com/leagues/77/stats/world-cup/teams)。核对两队的 Expected Goals (xG) 与 Expected Goals Conceded (xGA)（即 Defense 分类下的 xG conceded）；查看 Average possession 和 Accurate passes per match 判定谁掌控中场；使用 **Possession won final 3rd per match**（在 Defense 分类中）作为逼抢强度的直接代理指标（因 FotMob 无原生 PPDA）。
-2. **裁判与比赛环境核对**：直接在上述第一步的 **FotMob 单场 Match Details 页面**（Match facts / Overview 模块）中查阅核对：
-   - **主裁判信息**：核对裁判指派安排，必要时检索其历史执法尺度与给牌率，判定防守型/侵略性战术修正；
-   - **球场与环境**：确认比赛球场、城市、实时气温与降雨等。如果为高原城市（如墨西哥城、瓜达拉哈拉等 1500m 以上海拔），或实时气温 ≥ 32°C，必须触发本手册【3-A】中的胜率修正规则。
+
+2. **裁判与比赛环境核对**：直接从上述脚本解析得到的 **FotMob 单场 Match Details 数据**（`props.pageProps.content.matchFacts.infoBox` 与 `content.weather` 模块）中查阅核对：
+   - **主裁判信息**：提取裁判指派安排，必要时检索其历史执法尺度与给牌率，判定防守型/侵略性战术修正；
+   - **球场与环境**：确认比赛球场、城市、实时气温（必须包含在 HTML 信息条中）与降雨等。如果为高原城市（如墨西哥城、瓜达拉哈拉等 1500m 以上海拔），或实时气温 ≥ 32°C，必须触发本手册【3-A】中的胜率修正规则。
 
 ---
 
@@ -118,6 +122,7 @@ Step 7: 在「更衣室晴雨表」模块写入当前侦察结论
 关于比赛日页面及主控台的 HTML/CSS 结构、战术板定位规则、「更衣室晴雨表 & 舆情哨」挂件 HTML 骨架、CSS 样式及数值评定填写指南与避坑指南，请直接查阅独立的规范文件及空白模版，生成时直接复用：
 * **HTML 生成与定位规范**：[html_specification.md](file:///Users/ky230/Desktop/FF2026/reference/html_specification.md)
 * **空白比赛日 HTML 模版**：[match_day_template.html](file:///Users/ky230/Desktop/FF2026/reference/match_day_template.html)（模版底部注释中已包含「更衣室晴雨表 & 舆情哨」的完整 HTML 骨架及评定指南）
+* **校验脚本**：`python3 scripts/verify_matchday_html.py <html_file_path>`。用于检测生成的 HTML 页面中是否存在未填充的占位符或模板注释。
 
 ## 四、球队资料库（核心依据）
 
@@ -165,6 +170,7 @@ Step 7: 在「更衣室晴雨表」模块写入当前侦察结论
 4. **首发阵容预排与对照规则**：官方未公布首发时，必须直接采用 [data_sources.md](file:///Users/ky230/Desktop/FF2026/reference/data_sources.md) 指引的 FotMob Preview 提供的预计首发阵容与球衣号码。**生成的 HTML 页面中的战术板首发名单、阵型与位置，必须与 FotMob 单场网页上所展示的完全一致，做到“网站所见即面板所见”，不允许出现名字错位或镜像镜像颠倒等低级错误。**
 5. **战术板直达链接**：所有 HTML 页面战术板的标题内必须包含直达对应 FotMob Match 真实比赛页的超链接，**链接必须指向确切的比赛详情页，严禁使用 Leagues Overview 等空泛链接**。
 6. 所有 HTML 页面**必须包含 Mac 触控板双指缩放 JS 脚本**。
+7. **数据抓取方式约束**：在获取 FotMob 数据（首发阵容、伤停、天气、裁判、积分榜等）时，严禁使用慢速的浏览器子代理。必须直接运行仓库中的 [fetch_match_details.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_match_details.py) 与 [fetch_league_table.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_league_table.py) 脚本，获取结构化 JSON 存入对应比赛日目录下的 `json` 子目录中，作为 HTML 生成的唯一可靠数据依据。
 
 ---
 
@@ -183,17 +189,14 @@ Step 7: 在「更衣室晴雨表」模块写入当前侦察结论
 
 ---
 
-## 七、快速执行检查单（Agent 每日开工前核对）
+## 七、快速执行检查单（Agent 自动化推荐流程）
 
 ```
-□ 1. 打开 [data_sources.md](file:///Users/ky230/Desktop/FF2026/reference/data_sources.md)，通过 Fixtures by Date 找到目标 Match Preview 页面与确切 URL
-□ 2. 逐场核对：Fixtures Details 中的 Predicted XI (预计首发)、伤停面板与两队近 5 场走势
-□ 3. 访问 [球员统计数据](https://www.fotmob.com/leagues/77/stats/world-cup/players) 检索关键球员的个人数据（xG, xA, Chances Created, FotMob Rating）
-□ 4. 访问 [球队统计数据](https://www.fotmob.com/leagues/77/stats/world-cup/teams) 检索两队的 xG / xGA 底牌与传控数据，并读取 Possession won final 3rd 作为逼抢代理指标
-□ 5. 执行 [data_sources.md](file:///Users/ky230/Desktop/FF2026/reference/data_sources.md) 所列的 Google 搜索 Query 组（对每支球队至少执行 2 条更衣室与舆情检索），核对 3-B 优先级源
-□ 6. 依据 3-B 修正因子与 3-C 内讧表，计算出最终调整后的胜平负概率 (加总=100，胜率上限85%)
-□ 7. 评定更衣室晴雨表 5 维度分值，决定绿色/黄色/红色状态定性
-□ 8. 生成比赛日 HTML 页面，包含：战术板、更衣室晴雨表挂件、AI 预测报告、舆情哨情报简报
-□ 9. 严格核对红线：伤停或停赛球员在战术板置灰红边，标题带精确的 FotMob 比赛详情页直达链接
-□ 10. 将 Mac 触控板双指缩放的 JS 脚本注入页面，并在主控制台 index.html 中追加入口卡片与简述
+□ 1. 运行 [fetch_match_details.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_match_details.py) 抓取各场比赛的详细数据 JSON，并运行 [fetch_league_table.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_league_table.py) 抓取最新全小组 standings JSON，统一存入当天文件夹的 `json` 子目录下
+□ 2. 读取 JSON 文件：研判小组实时排名、战意、预计首发阵型与天气温度/主裁执裁尺度
+□ 3. 抓取舆情：对每支球队执行更衣室及伤停的 Google 搜索 Query（依据 3-B/3-C 计算最终调整后的概率与晴雨表分数）
+□ 4. 翻译与映射：在模型内存中将所有球员名字、裁判名字、球队名字翻译为中文，并匹配各自国旗和球衣颜色
+□ 5. 编译页面：读取 [match_day_template.html](file:///Users/ky230/Desktop/FF2026/reference/match_day_template.html)，用翻译后的中文数据、精确的坐标和美化后的概率条直接拼装生成 `index.html`，并清除尾部指南注释
+□ 6. 验证质量：运行 `python3 scripts/verify_matchday_html.py <date_str>/index.html`，必须输出 Verification SUCCESS
+□ 7. 主控集成：在主控制台 [index.html](file:///Users/ky230/Desktop/FF2026/index.html) 中更新当天入口的卡片状态为进行中，并追加入口卡片与简述
 ```

@@ -1,0 +1,4 @@
+# Ignore JSON data directories and JSON files
+**/json/
+*.json
+!reference/teams_database.json

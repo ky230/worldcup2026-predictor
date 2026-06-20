@@ -298,9 +298,9 @@
         }
 
         .loop-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             color: var(--primary-color);
             display: flex;
             align-items: center;
@@ -310,46 +310,73 @@
         .loop-flow {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.25rem;
+            gap: 1.5rem;
+            position: relative;
         }
 
         @media (min-width: 768px) {
             .loop-flow {
                 grid-template-columns: repeat(4, 1fr);
             }
+            .loop-flow::before {
+                content: '';
+                position: absolute;
+                top: 40px;
+                left: 5%;
+                right: 5%;
+                height: 2px;
+                background: linear-gradient(90deg, 
+                    rgba(0, 255, 102, 0.4) 0%, 
+                    rgba(56, 189, 248, 0.6) 50%, 
+                    rgba(0, 255, 102, 0.4) 100%
+                );
+                z-index: 0;
+            }
         }
 
         .loop-step {
-            background: rgba(255, 255, 255, 0.015);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             padding: 1.25rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
         }
 
         .loop-step:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: var(--accent-color);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--primary-color);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 255, 102, 0.1);
+        }
+
+        .step-badge-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
         }
 
         .step-num {
             font-family: monospace;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: var(--accent-color);
             background: rgba(56, 189, 248, 0.08);
             border: 1px solid rgba(56, 189, 248, 0.2);
             padding: 0.15rem 0.4rem;
             border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 0.75rem;
+        }
+
+        .step-icon {
+            font-size: 1.25rem;
         }
 
         .step-title {
             font-size: 0.95rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-main);
             margin-bottom: 0.5rem;
         }
@@ -357,8 +384,29 @@
         .step-desc {
             font-size: 0.78rem;
             color: var(--text-muted);
-            line-height: 1.4;
+            line-height: 1.45;
         }
+
+        .step-file-label {
+            margin-top: 0.75rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.04);
+            font-size: 0.7rem;
+            font-family: monospace;
+            color: var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .step-file-label code {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 1px 3px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+        }
+
     </style>
 </head>
 <body>
@@ -371,49 +419,11 @@
         <main>
             <div class="section-title">比赛日工作日志</div>
             <div class="grid">
-                <!-- 2026-06-18 Card -->
-                <a href="2026-06-18/index.html" class="card">
-                    <div class="card-header">
-                        <span class="date-badge">2026-06-18 / 19</span>
-                        <span class="status-badge status-active">未开始</span>
-                    </div>
-                    <div class="card-body">
-                        <h3>小组赛第一轮 - AB组阶段</h3>
-                        <p>将进行4场重要对战：捷克 vs 南非 (18日18:00)、瑞士 vs 波黑 (18日21:00)、加拿大 vs 卡塔尔 (19日00:00)、墨西哥 vs 韩国 (19日03:00)。包含首发名单、天气、场馆及大名单等深入数据。</p>
-                    </div>
-                    <div class="card-footer">
-                        进入比赛日面板
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </div>
-                </a>
-
-                <!-- 2026-06-19 Card -->
-                <a href="2026-06-19/index.html" class="card">
-                    <div class="card-header">
-                        <span class="date-badge">2026-06-19 / 20</span>
-                        <span class="status-badge status-active">未开始</span>
-                    </div>
-                    <div class="card-body">
-                        <h3>小组赛第二轮 - CD组阶段</h3>
-                        <p>将进行4场重要对战：美国 vs 澳大利亚 (19日21:00)、苏格兰 vs 摩洛哥 (20日00:00)、巴西 vs 海地 (20日02:30)、土耳其 vs 巴拉圭 (20日05:00)。包含AI预测分析报告、精细化定位首发阵容及伤停情报。</p>
-                    </div>
-                    <div class="card-footer">
-                        进入比赛日面板
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </div>
-                </a>
-
                 <!-- 2026-06-20 Card -->
                 <a href="2026-06-20/index.html" class="card">
                     <div class="card-header">
                         <span class="date-badge">2026-06-20 / 21</span>
-                        <span class="status-badge status-active">未开始</span>
+                        <span class="status-badge status-active">进行中</span>
                     </div>
                     <div class="card-body">
                         <h3>小组赛第二轮 - EF组阶段</h3>
@@ -443,24 +453,55 @@
                 </div>
                 <div class="loop-flow">
                     <div class="loop-step">
-                        <span class="step-num">PHASE 1</span>
-                        <div class="step-title">📊 专业数据深挖</div>
-                        <p class="step-desc">深度解析 FotMob 期望进球 (xG)、前场夺回球权逼抢压力与换人效率，结合球员近况评分锚定硬实力底盘。</p>
+                        <div class="step-badge-wrapper">
+                            <span class="step-num">PHASE 1</span>
+                            <span class="step-icon">📊</span>
+                        </div>
+                        <div class="step-title">数据源采集与解析</div>
+                        <p class="step-desc">通过后台爬虫脚本抓取 FotMob 期望进球 (xG)、近况、首发名单与战术板坐标，存为原始 JSON。</p>
+                        <div class="step-file-label">
+                            运行脚本:
+                            <code>scripts/fetch_match_details.py</code>
+                            <code>scripts/fetch_league_table.py</code>
+                        </div>
                     </div>
                     <div class="loop-step">
-                        <span class="step-num">PHASE 2</span>
-                        <div class="step-title">📡 场外舆情雷达</div>
-                        <p class="step-desc">抓取 The Athletic、队报等权威爆料，监控更衣室凝聚力、伤停假情报与战术泄密，发现实力折扣。</p>
+                        <div class="step-badge-wrapper">
+                            <span class="step-num">PHASE 2</span>
+                            <span class="step-icon">🕵️</span>
+                        </div>
+                        <div class="step-title">场外舆情雷达微调</div>
+                        <p class="step-desc">AI 扫描更衣室动态及新闻（内讧、伤停烟雾弹），结合内讧打折率及海拔气温评估，确立 5 维度晴雨表。</p>
+                        <div class="step-file-label">
+                            分析输入:
+                            <code>[date]/json/*.json</code>
+                            <code>reference/data_sources.md</code>
+                        </div>
                     </div>
                     <div class="loop-step">
-                        <span class="step-num">PHASE 3</span>
-                        <div class="step-title">⚖️ 融汇与概率校准</div>
-                        <p class="step-desc">热数据定锚，冷情报调偏。结合海拔温差修正，代入法国、比利时等强内讧体质折扣系数，定量校正胜平负概率。</p>
+                        <div class="step-badge-wrapper">
+                            <span class="step-num">PHASE 3</span>
+                            <span class="step-icon">🔄</span>
+                        </div>
+                        <div class="step-title">内存翻译与映射</div>
+                        <p class="step-desc">AI 在内存中将所有球员、裁判及球场名字翻译为中文。读取数据库映射各队国旗及队服色彩。</p>
+                        <div class="step-file-label">
+                            映射配置:
+                            <code>reference/teams_database.json</code>
+                        </div>
                     </div>
                     <div class="loop-step">
-                        <span class="step-num">PHASE 4</span>
-                        <div class="step-title">🔮 晴雨表视觉输出</div>
-                        <p class="step-desc">在比赛日前端面板动态插入「更衣室晴雨表 & 舆情哨」挂件，用 5 维度条形图与三档状态输出直观揭示出征风险。</p>
+                        <div class="step-badge-wrapper">
+                            <span class="step-num">PHASE 4</span>
+                            <span class="step-icon">🎨</span>
+                        </div>
+                        <div class="step-title">可视化面板编译</div>
+                        <p class="step-desc">合并分析数据与阵型图，渲染输出最终卡片，执行合规性检查（排除未填充占位符后发布）。</p>
+                        <div class="step-file-label">
+                            生成与校验:
+                            <code>reference/match_day_template.html</code>
+                            <code>scripts/verify_matchday_html.py</code>
+                        </div>
                     </div>
                 </div>
             </div>
