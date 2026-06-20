@@ -46,3 +46,27 @@
 ### [The Athletic](https://theathletic.com) / [BBC Sport](https://www.bbc.com/sport) / [Sky Sports](https://www.skysports.com)
 * **用途**：深度阅读跟队记者的独家爆料、主帅赛前发布会言论、战术细节前瞻、更衣室心态和历史对决背景（如国家怨恨、战意强弱）。
 * **说明**：提供丰富的新闻语料，帮助撰写极具说服力的 AI 预测分析。
+
+---
+
+## 📋 赛前首发名单预排规范 (沿用首轮与伤停排查)
+
+在官方首发公布之前（通常为赛前 1.5 小时以上），为了确保战术板的客观严谨，必须严格按照以下流程进行名单预排：
+
+### 1. 强制沿用第一轮真实首发
+由于无法随意揣测教练变阵，在赛前预排阶段，**必须直接复制该队第一轮（上一场）的官方实际首发阵容与球衣号码**作为战术板的底版。
+* **FotMob 历史首发查找路径**：访问 FotMob -> 世界杯赛程 -> 找到上一轮该队的比赛 -> 切换至 **Lineups** 标签页。
+* **第一轮关键比赛 FotMob 直达链接备份 (Group F)**：
+  * 🇯🇵 vs 🇳🇱 **荷兰 vs 日本**：[https://www.fotmob.com/matches/netherlands-vs-japan/1hn72b](https://www.fotmob.com/matches/netherlands-vs-japan/1hn72b)
+  * 🇹🇳 vs 🇸🇪 **突尼斯 vs 瑞典**：[https://www.fotmob.com/matches/tunisia-vs-sweden/1x5290](https://www.fotmob.com/matches/tunisia-vs-sweden/1x5290)
+
+### 2. 伤停与红黄牌停赛排查（高优先级核对项）
+在克隆第一轮首发后，必须对这 11 名主力进行伤停与红牌排查：
+* **红牌/黄牌停赛**：
+  * 在 **Sofascore** 或官方战报中核对该球员首轮是否吃到红牌或累积黄牌触发停赛（如南非队的 Zwane 与 Sithole 因首战红牌而在 06-18 停赛）。
+* **伤病与退队动态**：
+  * 必须利用 **Google News** 检索 `"[国家队/球员名] injury news World Cup 2026"`，获取最新的伤病退赛情报（如日本队远藤航因伤退赛、久保建英次轮伤停）。
+* **可视化标注规范**：
+  * **保留节点**：伤停/停赛的主力球员依旧绘制在战术板的对应首发位置上。
+  * **文字标注**：在球员名字后追加 **`(伤停)`** 或 **`(停赛)`**。
+  * **圆圈样式**：将球员圆圈的 CSS 样式修改为 **`background:#555555; color:#888888; border:1px solid #ff4444;`**（灰色底色，红色边框），在战术板中进行强视觉警示。
