@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-06-XX 赛事中心 — World Cup AI Prediction</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-hover-bg: rgba(255, 255, 255, 0.06);
+            --primary-color: #00ff66;
+            --primary-glow: rgba(0, 255, 102, 0.1);
+            --text-main: #f5f6f9;
+            --text-muted: #8b949e;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-color: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .back-nav {
+            margin-bottom: 2rem;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .date-badge {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            background: rgba(0, 255, 102, 0.08);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            font-weight: 600;
+        }
+
+        /* Match Grid */
+        .match-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .match-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .match-card:hover {
+            border-color: rgba(0, 255, 102, 0.3);
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        .match-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 0.75rem;
+        }
+
+        .group-tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .match-time {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .match-vs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .team-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .vs-divider {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Lineup and Prediction Accordion/Details */
+        .match-details {
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 1rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .detail-pane {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .pane-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .lineup-list {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .lineup-list li {
+            padding: 0.25rem 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.03);
+        }
+
+        .lineup-list li:last-child {
+            border-bottom: none;
+        }
+
+        .placeholder-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .match-info-banner {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            text-align: left;
+        }
+        @media (min-width: 600px) {
+            .match-info-banner {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            margin-bottom: 0.15rem;
+            font-weight: 600;
+        }
+        .info-value {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        .squad-info-section {
+            margin-top: 1rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.05);
+            padding-top: 0.75rem;
+            text-align: left;
+        }
+        .squad-col-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .squad-desc-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Soccer Pitch Visualizer */
+        .soccer-pitch {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: linear-gradient(135deg, #11361c 0%, #081d0f 100%);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1rem 0;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Grass lines effect */
+        .soccer-pitch::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10%,
+                rgba(0, 0, 0, 0.08) 10%,
+                rgba(0, 0, 0, 0.08) 20%
+            );
+            pointer-events: none;
+        }
+
+        .pitch-line {
+            position: absolute;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .midfield-line {
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+        }
+
+        .midfield-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .center-spot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .penalty-box-left {
+            top: 15%;
+            bottom: 15%;
+            left: 0;
+            width: 16%;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-right: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .penalty-box-right {
+            top: 15%;
+            bottom: 15%;
+            right: 0;
+            width: 16%;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .player-node {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            transition: transform 0.2s ease;
+        }
+
+        .player-node:hover {
+            transform: translate(-50%, -52%) scale(1.1);
+            z-index: 10;
+        }
+
+        .player-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .player-name {
+            margin-top: 4px;
+            font-size: 0.65rem;
+            color: #ffffff;
+            font-weight: 600;
+            white-space: nowrap;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            background: rgba(11, 12, 16, 0.85);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 2px 5px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        /* Adjust details layouts to span wider on desktop for visual pitch */
+        @media (min-width: 900px) {
+            .details-grid {
+                grid-template-columns: 2.2fr 1.3fr;
+            }
+        }
+
+        /* Human-readable Prediction Panel */
+        .prob-container {
+            margin-bottom: 1rem;
+        }
+        .prob-bar {
+            display: flex;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0.5rem 0;
+        }
+        .prob-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #000;
+        }
+        .prob-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .score-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.35rem;
+            margin-bottom: 0.75rem;
+        }
+        .score-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: var(--accent-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            font-weight: 700;
+        }
+        .score-badge.upset {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        .recommendation-tag {
+            background: rgba(0, 255, 102, 0.08);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            color: var(--primary-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 0.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .prediction-detail-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 0.5rem;
+            border-top: 1px dashed rgba(255,255,255,0.05);
+            padding-top: 0.5rem;
+        }
+        .factor-list {
+            margin-top: 0.5rem;
+            padding-left: 1.15rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .factor-list li {
+            margin-bottom: 0.25rem;
+        }
+        .section-sub-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-top: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Back Navigation -->
+        <div class="back-nav">
+            <a href="../index.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                返回主控制台
+            </a>
+        </div>
+
+        <header>
+            <div class="title-wrapper">
+                <h1 class="title">赛事中心 & AI 预测看板</h1>
+                <span class="date-badge">2026-06-XX</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="match-list">
+                
+                <!-- 在此处插入当日所有的 match-card -->
+
+            </div>
+        </main>
+    </div>
+    <script>
+        // 双指缩放网页功能 (针对 Mac 触控板)
+        let scale = 1;
+        window.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                scale -= e.deltaY * 0.01;
+                scale = Math.min(Math.max(0.5, scale), 3);
+                document.body.style.zoom = scale;
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
