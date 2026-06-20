@@ -283,6 +283,82 @@
             margin-top: 0.25rem;
             line-height: 1.4;
         }
+
+        /* =============================================
+           预测闭环架构 — Prediction Loop Architecture
+           ============================================= */
+        .loop-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .loop-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .loop-flow {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .loop-flow {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .loop-step {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .loop-step:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .step-num {
+            font-family: monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -355,6 +431,40 @@
                 <!-- Future matchdays can be appended here -->
             </div>
 
+            <!-- 🔮 AI 预测决策环路说明 -->
+            <div class="loop-section">
+                <div class="loop-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    绿茵神算 v2.0：AI 数据与舆情预测决策环路
+                </div>
+                <div class="loop-flow">
+                    <div class="loop-step">
+                        <span class="step-num">PHASE 1</span>
+                        <div class="step-title">📊 专业数据深挖</div>
+                        <p class="step-desc">深度解析 FotMob 期望进球 (xG)、前场夺回球权逼抢压力与换人效率，结合球员近况评分锚定硬实力底盘。</p>
+                    </div>
+                    <div class="loop-step">
+                        <span class="step-num">PHASE 2</span>
+                        <div class="step-title">📡 场外舆情雷达</div>
+                        <p class="step-desc">抓取 The Athletic、队报等权威爆料，监控更衣室凝聚力、伤停假情报与战术泄密，发现实力折扣。</p>
+                    </div>
+                    <div class="loop-step">
+                        <span class="step-num">PHASE 3</span>
+                        <div class="step-title">⚖️ 融汇与概率校准</div>
+                        <p class="step-desc">热数据定锚，冷情报调偏。结合海拔温差修正，代入法国、比利时等强内讧体质折扣系数，定量校正胜平负概率。</p>
+                    </div>
+                    <div class="loop-step">
+                        <span class="step-num">PHASE 4</span>
+                        <div class="step-title">🔮 晴雨表视觉输出</div>
+                        <p class="step-desc">在比赛日前端面板动态插入「更衣室晴雨表 & 舆情哨」挂件，用 5 维度条形图与三档状态输出直观揭示出征风险。</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Reference Section -->
             <div class="ref-section">
                 <div class="ref-title">
@@ -366,7 +476,7 @@
                 </div>
                 <ul class="ref-list">
                     <li class="ref-item">
-                        <a href="https://www.fifa.com/en/tournaments/mens/worldcup/2026/match-schedule" target="_blank" class="ref-link">
+                        <a href="https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026" target="_blank" class="ref-link">
                             FIFA 官方 2026 世界杯赛程中心
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                         </a>
@@ -378,13 +488,6 @@
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                         </a>
                         <p class="ref-desc">提供极其快速的实时首发阵容（Lineups）与动态战术阵型图，并提前发布各大权威媒体预测的首发方案。</p>
-                    </li>
-                    <li class="ref-item">
-                        <a href="https://www.sofascore.com" target="_blank" class="ref-link">
-                            Sofascore 实时比分与伤停统计
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                        </a>
-                        <p class="ref-desc">专业体育数据网站。通常在赛前 1 小时获取各队官报的 Team Sheet 首发/替补名单，提供多维度的实时球员表现技术评分及历史对决深度剖析。</p>
                     </li>
                     <li class="ref-item">
                         <a href="https://news.google.com" target="_blank" class="ref-link">

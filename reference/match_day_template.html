@@ -208,6 +208,19 @@
             gap: 0.25rem;
         }
 
+        .pane-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .pane-title a:hover {
+            color: var(--primary-color);
+        }
+
         .lineup-list {
             list-style: none;
             font-size: 0.85rem;
@@ -422,7 +435,7 @@
         /* Adjust details layouts to span wider on desktop for visual pitch */
         @media (min-width: 900px) {
             .details-grid {
-                grid-template-columns: 2.2fr 1.3fr;
+                grid-template-columns: 1.80fr 1.70fr;
             }
         }
 
@@ -513,6 +526,135 @@
             font-weight: bold;
             margin-top: 0.75rem;
         }
+
+        /* =============================================
+           更衣室晴雨表 & 舆情哨 — CSS 样式
+           ============================================= */
+        .dressing-room-barometer {
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .barometer-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+        .barometer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 600px) {
+            .barometer-grid { grid-template-columns: 1fr; }
+        }
+        .barometer-team-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+        .meter-row {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.3rem;
+        }
+        .meter-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            width: 90px;
+            flex-shrink: 0;
+        }
+        .meter-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .meter-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+        .meter-score {
+            font-size: 0.68rem;
+            font-family: monospace;
+            color: var(--text-muted);
+            width: 24px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .barometer-status {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .status-green {
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid rgba(0, 255, 102, 0.25);
+            color: var(--primary-color);
+        }
+        .status-yellow {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            color: #fbbf24;
+        }
+        .status-red {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.25);
+            color: #ff4444;
+        }
+        .scout-brief {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.06);
+        }
+        .scout-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+        }
+        .scout-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .scout-tag {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            line-height: 1.4;
+            display: inline-block;
+            width: fit-content;
+        }
+        .tag-normal {
+            background: rgba(0, 255, 102, 0.06);
+            border: 1px solid rgba(0, 255, 102, 0.15);
+            color: #a0c8b0;
+        }
+        .tag-watch {
+            background: rgba(251, 191, 36, 0.07);
+            border: 1px solid rgba(251, 191, 36, 0.18);
+            color: #d4a840;
+        }
+        .tag-alert {
+            background: rgba(255, 68, 68, 0.07);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            color: #cc6666;
+        }
     </style>
 </head>
 <body>
@@ -557,3 +699,218 @@
     </script>
 </body>
 </html>
+
+<!--
+=============================================================================
+🌈 比赛卡片 (match-card) 完整骨架骨骼及填写指南 (Agent专用)
+=============================================================================
+
+1. 骨架 HTML 代码片段 (复制并循环填入 .match-list 中)：
+
+<div class="match-card">
+    <div class="match-meta">
+        <span class="group-tag">小组赛第 2 轮 · X 组</span>
+        <span class="match-time">2026-06-XX XX:XX</span>
+    </div>
+    
+    <div class="match-vs">
+        <div class="team-box">
+            <span class="team-name">🏳️ 主队名</span>
+        </div>
+        <div class="vs-divider">VS</div>
+        <div class="team-box">
+            <span class="team-name">🏳️ 客队名</span>
+        </div>
+    </div>
+
+    <div class="match-info-banner">
+        <div class="info-item">
+            <span class="info-label">🏟️ 比赛球场</span>
+            <span class="info-value">中文球场名 (English Stadium)</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌤️ 气候气温</span>
+            <span class="info-value">如：小雨 / 恒温 21°C</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">🌿 场馆草皮</span>
+            <span class="info-value">如：露天 / 伸缩屋顶 · 天然草</span>
+        </div>
+    </div>
+
+    <div class="squad-info-section">
+        <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+        <p class="squad-desc-text">
+            <strong>主队</strong>：此处写入主队主力伤病、烟雾弹等背景。
+            <br>
+            <strong>客队</strong>：此处写入客队主力伤病、红黄牌停赛等背景。
+        </p>
+    </div>
+
+    <!-- 更衣室晴雨表 & 舆情哨 -->
+    <div class="dressing-room-barometer">
+        <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+        <div class="barometer-grid">
+            <div class="barometer-team">
+                <div class="barometer-team-name">🏳️ 主队名</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 40%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">4.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 20%; background:#00ff66;"></div></div>
+                        <span class="meter-score">2.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-green">🟢 正常出征</div>
+            </div>
+            <div class="barometer-team">
+                <div class="barometer-team-name">🏳️ 客队名</div>
+                <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 40%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">4.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 20%; background:#00ff66;"></div></div>
+                        <span class="meter-score">2.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                </div>
+                <div class="barometer-status status-yellow">🟡 注意风险</div>
+            </div>
+        </div>
+        <div class="scout-brief">
+            <div class="scout-title">📡 舆情哨情报简报</div>
+            <div class="scout-content">
+                <span class="scout-tag tag-normal">主队舆情摘要简报（绿色/正常）</span>
+                <span class="scout-tag tag-watch">客队舆情摘要简报（黄色/预警）</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="match-details">
+        <div class="details-grid">
+            <!-- 左侧：战术板 -->
+            <div class="detail-pane">
+                <div class="pane-title">
+                    <a href="【此处填入精确的FotMob单场比赛详情页URL】" target="_blank">
+                        📋 战术板预测阵容 (在 FotMob 查看可能的阵容 🔗)
+                    </a>
+                </div>
+                <div class="soccer-pitch">
+                    <div class="pitch-line midfield-line"></div>
+                    <div class="pitch-line midfield-circle"></div>
+                    <div class="pitch-line center-spot"></div>
+                    <div class="pitch-line penalty-box-left"></div>
+                    <div class="pitch-line penalty-box-right"></div>
+                    
+                    <!-- 1. 主队定位 (自左向右攻，GK在最左侧。左路 LB 对应 top 较小处；右路 RB 对应 top 较大处) -->
+                    <!-- 门将示例 -->
+                    <div class="player-node" style="left: 6%; top: 50%;">
+                        <div class="player-circle" style="background:#主队球衣主色; color:#字色; border:1px solid #边框色;">1</div>
+                        <div class="player-name">球员中文名</div>
+                    </div>
+                    
+                    <!-- 2. 客队定位 (自右向左攻，GK在最右侧。右路 RB 对应 top 较小处；左路 LB 对应 top 较大处) -->
+                    <!-- 门将示例 -->
+                    <div class="player-node" style="left: 94%; top: 50%;">
+                        <div class="player-circle" style="background:#客队球衣主色; color:#字色; border:1px solid #边框色;">23</div>
+                        <div class="player-name">球员中文名</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：AI预测分析 -->
+            <div class="detail-pane">
+                <div class="pane-title">🤖 AI 赛事预测报告</div>
+                <div class="prob-container">
+                    <div class="prob-bar">
+                        <div class="prob-segment" style="width: XX%; background: #00ff66;">XX%</div>
+                        <div class="prob-segment" style="width: YY%; background: #a8a8a8;">YY%</div>
+                        <div class="prob-segment" style="width: ZZ%; background: #38bdf8;">ZZ%</div>
+                    </div>
+                    <div class="prob-labels">
+                        <span>🏳️ 主胜</span>
+                        <span>🤝 平局</span>
+                        <span>🏳️ 客胜</span>
+                    </div>
+                </div>
+                
+                <div class="section-sub-title">让球指数预测</div>
+                <span class="recommendation-tag">首选：让球结果</span>
+                <span class="recommendation-tag" style="background:rgba(56,189,248,0.08); border-color:rgba(56,189,248,0.2); color:var(--accent-color);">次选：让球防冷</span>
+                
+                <div class="section-sub-title">波胆/比分倾向</div>
+                <div class="score-tags">
+                    <span class="score-badge">稳胆 X-X</span>
+                    <span class="score-badge">稳胆 X-X</span>
+                    <span class="score-badge upset">防冷 Y-Y</span>
+                    <span class="score-badge upset">防冷 Y-Y</span>
+                </div>
+
+                <div class="section-sub-title">核心战术要点</div>
+                <ul class="factor-list">
+                    <li>要点1（不超过50字）。</li>
+                    <li>要点2（不超过50字）。</li>
+                    <li>要点3（不超过50字）。</li>
+                </ul>
+
+                <p class="prediction-detail-text">
+                    <strong>解说倾向：</strong>在此写入 100–200 字口语化专业分析。
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+=============================================================================
+📈 更衣室晴雨表 (Dressing Room Barometer) 评定填写指南
+=============================================================================
+
+每个指标 10 分制，在骨架 HTML 中通过 meter-fill 的 style="width: XX%" (如 80% 表示 8.0 分) 反映：
+- 更衣室凝聚力 (🧠) -> 无内讧 10.0；单源爆料 -2.0；多源爆料确认 -4.0；强内讧体质（法/比等）基础扣 1.0。
+- 关键球员状态 (💪) -> 全员巅峰 10.0；主力状态低迷 -2.0；核心伤停/缺席 -4.0。
+- 外部压力指数 (🌡️) -> 平稳 0；被媒体捧为冠军热门 +2.0；受到国内强烈口诛笔伐 +1.0 - +3.0。
+- 伤停风险系数 (🚑) -> 无伤病 0；一名主力伤病 +2.0；两名主力伤病 +4.0；核心门将/腰部停赛 +3.0。
+- 战术稳定性 (🌪️) -> 首发战术极其稳定 10.0；火线换帅 -4.0；战术摇摆大改 -2.0；首仗大败面临体系自我怀疑 -2.0。
+
+状态输出判断：
+- 🟢 正常出征：平均分 ≥ 7.5，且无 RED 指标。
+- 🟡 注意风险：1-2个维度 < 6.5，或外部压力/凝聚力单项低于 5.0。
+- 🔴 高度警戒：≥2个维度 < 5.0，或更衣室凝聚力/关键球员状态单项低于 4.0。
+-->

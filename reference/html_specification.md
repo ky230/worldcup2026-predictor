@@ -115,9 +115,9 @@ pane-title: "🤖 AI 赛事预测报告 (智能分析)"
 
 ① prob-container     → 胜/平/负概率条（prob-bar + prob-labels）
 ② section-sub-title   → "让球指数预测 (让球方 ±N)"
-   recommendation-tag → 首选 + 次选
+   recommendation-tag → 必须给出且仅给出 2 个选项：首选 (绿色) + 次选 (蓝色，带背景色和边框)
 ③ section-sub-title   → "波胆/比分倾向"
-   score-tags         → 稳胆 X-X + 防冷 X-X（score-badge / score-badge.upset）
+   score-tags         → 必须给出且仅给出 4 个选项：2 个稳胆 (score-badge) + 2 个防冷 (score-badge upset)
 ④ section-sub-title   → "核心战术要点"
    factor-list        → 3条战术分析要点（< 50 字/条）
 ⑤ prediction-detail-text → 解说倾向（100–200字口语化专业分析）
