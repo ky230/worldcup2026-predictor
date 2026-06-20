@@ -192,8 +192,8 @@ Step 7: 在「更衣室晴雨表」模块写入当前侦察结论
 ## 七、快速执行检查单（Agent 自动化推荐流程）
 
 ```
-□ 1. 运行 [fetch_match_details.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_match_details.py) 抓取各场比赛的详细数据 JSON，并运行 [fetch_league_table.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_league_table.py) 抓取最新全小组 standings JSON，统一存入当天文件夹的 `json` 子目录下
-□ 2. 读取 JSON 文件：研判小组实时排名、战意、预计首发阵型与天气温度/主裁执裁尺度
+□ 1. 运行 [fetch_match_details.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_match_details.py) 抓取各场比赛详细数据，并运行 [fetch_league_table.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_league_table.py) 抓取 standings JSON，以及运行 [fetch_yellow_cards.py](file:///Users/ky230/Desktop/FF2026/scripts/fetch_yellow_cards.py) 抓取累计黄牌 JSON，统一存入当天文件夹的 `json` 子目录下
+□ 2. 读取 JSON 文件：研判小组实时排名、战意、预计首发阵型与天气温度/主裁执裁尺度，核对黄牌名单为首发球员名字后追加 `🟨`
 □ 3. 抓取舆情：对每支球队执行更衣室及伤停的 Google 搜索 Query（依据 3-B/3-C 计算最终调整后的概率与晴雨表分数）
 □ 4. 翻译与映射：在模型内存中将所有球员名字、裁判名字、球队名字翻译为中文，并匹配各自国旗和球衣颜色
 □ 5. 编译页面：读取 [match_day_template.html](file:///Users/ky230/Desktop/FF2026/reference/match_day_template.html)，用翻译后的中文数据、精确的坐标和美化后的概率条直接拼装生成 `index.html`，并清除尾部指南注释
