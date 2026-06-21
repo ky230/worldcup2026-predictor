@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-06-21 赛事中心 — World Cup AI Prediction</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-hover-bg: rgba(255, 255, 255, 0.06);
+            --primary-color: #00ff66;
+            --primary-glow: rgba(0, 255, 102, 0.1);
+            --text-main: #f5f6f9;
+            --text-muted: #8b949e;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-color: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.1);
+        }
+
+        html {
+            font-size: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .back-nav {
+            margin-bottom: 2rem;
+        }
+
+        .back-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .title-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .date-badge {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            background: rgba(0, 255, 102, 0.08);
+            padding: 0.3rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            font-weight: 600;
+        }
+
+        /* Match Grid */
+        .match-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .match-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .match-card:hover {
+            border-color: rgba(0, 255, 102, 0.3);
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        .match-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding-bottom: 0.75rem;
+        }
+
+        .group-tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .match-time {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .match-vs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .team-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .vs-divider {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Lineup and Prediction Accordion/Details */
+        .match-details {
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 1rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .detail-pane {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .pane-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .pane-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .pane-title a:hover {
+            color: var(--primary-color);
+        }
+
+        .lineup-list {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .lineup-list li {
+            padding: 0.25rem 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.03);
+        }
+
+        .lineup-list li:last-child {
+            border-bottom: none;
+        }
+
+        .placeholder-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .match-info-banner {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            text-align: left;
+        }
+        @media (min-width: 600px) {
+            .match-info-banner {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            margin-bottom: 0.15rem;
+            font-weight: 600;
+        }
+        .info-value {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+        .squad-info-section {
+            margin-top: 1rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.05);
+            padding-top: 0.75rem;
+            text-align: left;
+        }
+        .squad-col-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .squad-desc-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Soccer Pitch Visualizer */
+        .soccer-pitch {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: linear-gradient(135deg, #11361c 0%, #081d0f 100%);
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1rem 0;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Grass lines effect */
+        .soccer-pitch::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10%,
+                rgba(0, 0, 0, 0.08) 10%,
+                rgba(0, 0, 0, 0.08) 20%
+            );
+            pointer-events: none;
+        }
+
+        .pitch-line {
+            position: absolute;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .midfield-line {
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+        }
+
+        .midfield-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .center-spot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .penalty-box-left {
+            top: 15%;
+            bottom: 15%;
+            left: 0;
+            width: 16%;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-right: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .penalty-box-right {
+            top: 15%;
+            bottom: 15%;
+            right: 0;
+            width: 16%;
+            border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .player-node {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            transition: transform 0.2s ease;
+        }
+
+        .player-node:hover {
+            transform: translate(-50%, -52%) scale(1.1);
+            z-index: 10;
+        }
+
+        .player-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .player-name {
+            margin-top: 4px;
+            font-size: 0.65rem;
+            color: #ffffff;
+            font-weight: 600;
+            white-space: nowrap;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+            background: rgba(11, 12, 16, 0.85);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 2px 5px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        /* Adjust details layouts to span wider on desktop for visual pitch */
+        @media (min-width: 900px) {
+            .details-grid {
+                grid-template-columns: 1.80fr 1.70fr;
+            }
+        }
+
+        /* Human-readable Prediction Panel */
+        .prob-container {
+            margin-bottom: 1rem;
+        }
+        .prob-bar {
+            display: flex;
+            height: 18px;
+            border-radius: 9px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            margin: 0.8rem 0;
+        }
+        .prob-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #000;
+        }
+        .prob-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .score-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.35rem;
+            margin-bottom: 0.75rem;
+        }
+        .score-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: var(--accent-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            font-weight: 700;
+        }
+        .score-badge.upset {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        .recommendation-tag {
+            background: rgba(0, 255, 102, 0.08);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            color: var(--primary-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 0.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .prediction-detail-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 0.5rem;
+            border-top: 1px dashed rgba(255,255,255,0.05);
+            padding-top: 0.5rem;
+        }
+        .factor-list {
+            margin-top: 0.5rem;
+            padding-left: 1.15rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .factor-list li {
+            margin-bottom: 0.25rem;
+        }
+        .section-sub-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-top: 0.75rem;
+        }
+
+        /* =============================================
+           更衣室晴雨表 & 舆情哨 — CSS 样式
+           ============================================= */
+        .dressing-room-barometer {
+            margin: 1rem 0;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .barometer-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+        .barometer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 600px) {
+            .barometer-grid { grid-template-columns: 1fr; }
+        }
+        .barometer-team-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+        .meter-row {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.6rem;
+        }
+        .meter-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .meter-bar {
+            flex: 1;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .meter-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease;
+        }
+        .meter-score {
+            font-size: 0.68rem;
+            font-family: monospace;
+            color: var(--text-muted);
+            width: 24px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .barometer-status {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .status-green {
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid rgba(0, 255, 102, 0.25);
+            color: var(--primary-color);
+        }
+        .status-yellow {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            color: #fbbf24;
+        }
+        .status-red {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid rgba(255, 68, 68, 0.25);
+            color: #ff4444;
+        }
+        .scout-brief {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.06);
+        }
+        .scout-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+        }
+        .scout-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .scout-tag {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            line-height: 1.4;
+            display: inline-block;
+            width: fit-content;
+        }
+        .tag-normal {
+            background: rgba(0, 255, 102, 0.06);
+            border: 1px solid rgba(0, 255, 102, 0.15);
+            color: #a0c8b0;
+        }
+        .tag-watch {
+            background: rgba(251, 191, 36, 0.07);
+            border: 1px solid rgba(251, 191, 36, 0.18);
+            color: #d4a840;
+        }
+        .tag-alert {
+            background: rgba(255, 68, 68, 0.07);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            color: #cc6666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Back Navigation -->
+        <div class="back-nav">
+            <a href="../index.html" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                返回主控制台
+            </a>
+        </div>
+
+        <header>
+            <div class="title-wrapper">
+                <h1 class="title">赛事中心 & AI 预测看板</h1>
+                <span class="date-badge">2026-06-21</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="match-list">
+                
+                        <div class="match-card">
+            <div class="match-meta">
+                <span class="group-tag">小组赛第 2 轮 · H 组</span>
+                <span class="match-time">2026-06-21 16:00</span>
+            </div>
+            
+            <div class="match-vs">
+                <div class="team-box">
+                    <span class="team-name">🇪🇸 西班牙</span>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="team-box">
+                    <span class="team-name">🇸🇦 沙特</span>
+                </div>
+            </div>
+
+            <div class="match-info-banner">
+                <div class="info-item">
+                    <span class="info-label">🏟️ 比赛球场</span>
+                    <span class="info-value">亚特兰大体育场 (Atlanta Stadium)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌤️ 气候气温</span>
+                    <span class="info-value">多云 / 27°C (湿度 63%)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌿 场馆草皮</span>
+                    <span class="info-value">天然草</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⚖️ 主裁判</span>
+                    <span class="info-value">拉斐尔·克劳斯 (巴西)</span>
+                </div>
+            </div>
+
+            <div class="squad-info-section">
+                <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+                <p class="squad-desc-text">
+                    <strong>西班牙</strong>：<strong>维克托·穆尼奥斯</strong> (伤退)。
+                    <br>
+                    <strong>沙特</strong>：无。
+                </p>
+            </div>
+
+            <!-- 更衣室晴雨表 & 舆情哨 -->
+            <div class="dressing-room-barometer">
+                <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+                <div class="barometer-grid">
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇪🇸 西班牙</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 60%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 20%; background:#00ff66;"></div></div>
+                        <span class="meter-score">2.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-green">🟢 正常出征</div>
+                    </div>
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇸🇦 沙特</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 50%; background:#00ff66;"></div></div>
+                        <span class="meter-score">5.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 15%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-green">🟢 正常出征</div>
+                    </div>
+                </div>
+                <div class="scout-brief">
+                    <div class="scout-title">📡 舆情哨情报简报</div>
+                    <div class="scout-content">
+<span class="scout-tag tag-watch">Spain: 首战爆冷打平佛得角，主帅面临一定舆论质疑，但队内无实质冲突。</span>
+<span class="scout-tag tag-normal">Saudi Arabia: 首场顽强逼平乌拉圭拿到1分，目前士气大振，战意充足。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="match-details">
+                <div class="details-grid">
+                    <!-- 战术板 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">
+                            <a href="https://www.fotmob.com/matches/spain-vs-saudi-arabia/4667801" target="_blank">
+                                📋 预计首发阵型 (4-3-3 vs 3-4-2-1)
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            </a>
+                        </div>
+                        <div class="soccer-pitch">
+                            <!-- Field Lines -->
+                            <div class="pitch-line midfield-line"></div>
+                            <div class="midfield-circle"></div>
+                            <div class="center-spot"></div>
+                            <div class="pitch-line penalty-box-left"></div>
+                            <div class="pitch-line penalty-box-right"></div>
+                            
+                            <!-- Home starters -->
+                <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">23</div>
+                    <div class="player-name">乌奈·西蒙</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 87.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">5</div>
+                    <div class="player-name">马科斯·略伦特</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 62.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">22</div>
+                    <div class="player-name">保·库巴西</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 37.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">14</div>
+                    <div class="player-name">埃梅里克·拉波尔特</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 12.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">24</div>
+                    <div class="player-name">马克·库库雷利亚</div>
+                </div>
+                <div class="player-node" style="left: 29.908%; top: 79.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">8</div>
+                    <div class="player-name">法比安·鲁伊斯</div>
+                </div>
+                <div class="player-node" style="left: 29.908%; top: 50.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">16</div>
+                    <div class="player-name">罗德里</div>
+                </div>
+                <div class="player-node" style="left: 29.908%; top: 21.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">20</div>
+                    <div class="player-name">佩德里 🟨</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 79.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">19</div>
+                    <div class="player-name">拉明·亚马尔</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">21</div>
+                    <div class="player-name">米克尔·奥亚萨瓦尔</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 21.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffd166; border:1px solid #ffd166;">17</div>
+                    <div class="player-name">尼科·威廉姆斯</div>
+                </div>
+
+                            <!-- Away starters -->
+                <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">21</div>
+                    <div class="player-name">穆罕默德·奥韦斯</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 21.000%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">5</div>
+                    <div class="player-name">哈桑·坦巴蒂</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 50.000%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">3</div>
+                    <div class="player-name">阿里·拉贾米</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 79.000%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">4</div>
+                    <div class="player-name">阿卜杜勒拉赫·阿姆里 🟨</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 12.500%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">12</div>
+                    <div class="player-name">绍德·阿卜杜勒哈米德</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 37.500%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">23</div>
+                    <div class="player-name">莫罕默德·卡努</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 62.500%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">15</div>
+                    <div class="player-name">阿卜杜拉·海巴里</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 87.500%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">24</div>
+                    <div class="player-name">穆提卜·哈尔比</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 30.000%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">7</div>
+                    <div class="player-name">穆萨卜·朱韦尔</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 70.000%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">10</div>
+                    <div class="player-name">萨利姆·多萨里</div>
+                </div>
+                <div class="player-node" style="left: 58.078%; top: 50.000%;">
+                    <div class="player-circle" style="background:#006c35; color:#ffffff; border:1px solid #ffffff;">9</div>
+                    <div class="player-name">菲拉斯·布赖坎</div>
+                </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI 预测 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
+                        <div class="prob-container">
+                            <div class="prob-labels">
+                                <span>西班牙 胜</span>
+                                <span>平局</span>
+                                <span>沙特 胜</span>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="prob-segment" style="width: 72%; background: var(--primary-color);">72%</div>
+                                <div class="prob-segment" style="width: 18%; background: var(--text-muted); color: #fff;">18%</div>
+                                <div class="prob-segment" style="width: 10%; background: var(--accent-color);">10%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-sub-title">让球指数预测 (让球方)</div>
+                        <div class="recommendation-tag">西班牙 (-1.5) (首选)</div>
+                        <div class="recommendation-tag" style="background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.2); color: var(--accent-color);">平局 (西班牙刚好净胜1球) (次选)</div>
+                        
+                        <div class="section-sub-title" style="margin-top:0.75rem;">波胆/比分倾向</div>
+                        <div class="score-tags">
+<span class="score-badge">2-0</span>
+<span class="score-badge">3-0</span>
+<span class="score-badge upset">1-0</span>
+<span class="score-badge upset">2-1</span>
+                        </div>
+                        
+                        <div class="section-sub-title">核心战术要点</div>
+                        <ul class="factor-list">
+<li>亚马尔与尼科·威廉姆斯两翼撕扯沙特低位防线</li>
+<li>罗德里坐镇中场切断沙特的防守反击路线</li>
+<li>沙特此役缺少主动进攻手段，预计将全员退守寻求平局</li>
+                        </ul>
+                        
+                        <p class="prediction-detail-text">
+                            西班牙在首战被佛得角逼平后已经不容有失，全队拿分出线的战意极强。沙特首轮战平乌拉圭固然出色，但在控球压迫更强的西班牙面前，沙特的阵型很容易被压缩在禁区前沿。预计西班牙将通过两翼亚马尔和威廉姆斯的个人突破撕开缺口，罗德里的中场拦截会使沙特很难打出有效的垂直反击。看好西班牙取得一场大胜。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="match-card">
+            <div class="match-meta">
+                <span class="group-tag">小组赛第 2 轮 · G 组</span>
+                <span class="match-time">2026-06-21 19:00</span>
+            </div>
+            
+            <div class="match-vs">
+                <div class="team-box">
+                    <span class="team-name">🇧🇪 比利时</span>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="team-box">
+                    <span class="team-name">🇮🇷 伊朗</span>
+                </div>
+            </div>
+
+            <div class="match-info-banner">
+                <div class="info-item">
+                    <span class="info-label">🏟️ 比赛球场</span>
+                    <span class="info-value">洛杉矶体育场 (SoFi Stadium)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌤️ 气候气温</span>
+                    <span class="info-value">多云 / 21°C (湿度 62%)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌿 场馆草皮</span>
+                    <span class="info-value">天然草</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⚖️ 主裁判</span>
+                    <span class="info-value">达里奥·埃雷拉 (阿根廷)</span>
+                </div>
+            </div>
+
+            <div class="squad-info-section">
+                <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+                <p class="squad-desc-text">
+                    <strong>比利时</strong>：<strong>泽诺·德巴斯特</strong> (伤退)。
+                    <br>
+                    <strong>伊朗</strong>：无。
+                </p>
+            </div>
+
+            <!-- 更衣室晴雨表 & 舆情哨 -->
+            <div class="dressing-room-barometer">
+                <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+                <div class="barometer-grid">
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇧🇪 比利时</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 65%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 45%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">4.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-yellow">🟡 稳步磨合</div>
+                    </div>
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇮🇷 伊朗</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 60%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">6.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 20%; background:#00ff66;"></div></div>
+                        <span class="meter-score">2.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-green">🟢 正常出征</div>
+                    </div>
+                </div>
+                <div class="scout-brief">
+                    <div class="scout-title">📡 舆情哨情报简报</div>
+                    <div class="scout-content">
+<span class="scout-tag tag-normal">Belgium: 边路爆点多库确认因呼吸道感染缺战，战术打折明显。</span>
+<span class="scout-tag tag-watch">Iran: 前期向 FIFA 投诉后勤差旅条件限制备战，心理和体能受轻微负面影响。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="match-details">
+                <div class="details-grid">
+                    <!-- 战术板 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">
+                            <a href="https://www.fotmob.com/matches/belgium-vs-iran/4667793" target="_blank">
+                                📋 预计首发阵型 (4-2-3-1 vs 4-4-2)
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            </a>
+                        </div>
+                        <div class="soccer-pitch">
+                            <!-- Field Lines -->
+                            <div class="pitch-line midfield-line"></div>
+                            <div class="midfield-circle"></div>
+                            <div class="center-spot"></div>
+                            <div class="pitch-line penalty-box-left"></div>
+                            <div class="pitch-line penalty-box-right"></div>
+                            
+                            <!-- Home starters -->
+                <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">1</div>
+                    <div class="player-name">蒂博·库尔图瓦</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 87.500%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">15</div>
+                    <div class="player-name">托马斯·默尼耶</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 62.500%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">25</div>
+                    <div class="player-name">纳坦·恩戈伊</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 37.500%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">4</div>
+                    <div class="player-name">布兰登·梅切莱</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 12.500%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">5</div>
+                    <div class="player-name">马克西姆·德克伊佩尔 🟨</div>
+                </div>
+                <div class="player-node" style="left: 23.924%; top: 70.000%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">7</div>
+                    <div class="player-name">凯文·德布劳内</div>
+                </div>
+                <div class="player-node" style="left: 23.924%; top: 30.000%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">8</div>
+                    <div class="player-name">尤里·蒂勒曼斯</div>
+                </div>
+                <div class="player-node" style="left: 32.947%; top: 83.700%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">14</div>
+                    <div class="player-name">多迪·卢克巴基奥</div>
+                </div>
+                <div class="player-node" style="left: 32.947%; top: 50.000%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">20</div>
+                    <div class="player-name">汉斯·瓦纳肯</div>
+                </div>
+                <div class="player-node" style="left: 32.947%; top: 16.300%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">11</div>
+                    <div class="player-name">杰里米·多库</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                    <div class="player-circle" style="background:#e30a17; color:#ffffff; border:1px solid #ffd60a;">9</div>
+                    <div class="player-name">罗梅卢·卢卡库</div>
+                </div>
+
+                            <!-- Away starters -->
+                <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">1</div>
+                    <div class="player-name">阿里雷萨·贝兰万德</div>
+                </div>
+                <div class="player-node" style="left: 82.060%; top: 12.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">23</div>
+                    <div class="player-name">拉明·雷扎伊安</div>
+                </div>
+                <div class="player-node" style="left: 82.060%; top: 37.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">4</div>
+                    <div class="player-name">绍贾·哈里扎德</div>
+                </div>
+                <div class="player-node" style="left: 82.060%; top: 62.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">19</div>
+                    <div class="player-name">阿里·内马蒂</div>
+                </div>
+                <div class="player-node" style="left: 82.060%; top: 87.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">5</div>
+                    <div class="player-name">米拉德·穆罕默迪</div>
+                </div>
+                <div class="player-node" style="left: 70.092%; top: 12.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">8</div>
+                    <div class="player-name">穆罕默德·莫赫比</div>
+                </div>
+                <div class="player-node" style="left: 70.092%; top: 37.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">14</div>
+                    <div class="player-name">萨曼·古多斯</div>
+                </div>
+                <div class="player-node" style="left: 70.092%; top: 62.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">6</div>
+                    <div class="player-name">赛义德·埃扎托拉希</div>
+                </div>
+                <div class="player-node" style="left: 70.092%; top: 87.500%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">10</div>
+                    <div class="player-name">梅赫迪·加耶迪</div>
+                </div>
+                <div class="player-node" style="left: 58.078%; top: 30.000%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">20</div>
+                    <div class="player-name">沙赫里亚尔·莫甘卢</div>
+                </div>
+                <div class="player-node" style="left: 58.078%; top: 70.000%;">
+                    <div class="player-circle" style="background:#ffffff; color:#239f40; border:1px solid #da251d;">9</div>
+                    <div class="player-name">梅赫迪·塔雷米</div>
+                </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI 预测 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
+                        <div class="prob-container">
+                            <div class="prob-labels">
+                                <span>比利时 胜</span>
+                                <span>平局</span>
+                                <span>伊朗 胜</span>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="prob-segment" style="width: 60%; background: var(--primary-color);">60%</div>
+                                <div class="prob-segment" style="width: 25%; background: var(--text-muted); color: #fff;">25%</div>
+                                <div class="prob-segment" style="width: 15%; background: var(--accent-color);">15%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-sub-title">让球指数预测 (让球方)</div>
+                        <div class="recommendation-tag">比利时 (-1) 平 (刚好净胜1球) (首选)</div>
+                        <div class="recommendation-tag" style="background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.2); color: var(--accent-color);">伊朗 (+1) 胜/平 (次选)</div>
+                        
+                        <div class="section-sub-title" style="margin-top:0.75rem;">波胆/比分倾向</div>
+                        <div class="score-tags">
+<span class="score-badge">1-0</span>
+<span class="score-badge">2-1</span>
+<span class="score-badge upset">1-1</span>
+<span class="score-badge upset">0-0</span>
+                        </div>
+                        
+                        <div class="section-sub-title">核心战术要点</div>
+                        <ul class="factor-list">
+<li>主力边锋多库确诊伤缺，比利时左路推进与爆破力严重折损</li>
+<li>德布劳内前腰位置的发牌和后插上射门成为比利时核心解题手段</li>
+<li>伊朗前锋塔雷米在中路具备很强的牵制力，定位球是其重要武器</li>
+                        </ul>
+                        
+                        <p class="prediction-detail-text">
+                            比利时迎来坏消息，多库因呼吸道感染确认缺阵，这将使鲁迪·加西亚的球队在边路失去最强爆点，进攻只能更多依赖德布劳内在中路的调度与直塞。伊朗首轮逼平新西兰展现了不错的反弹韧性，但在后勤保障不力的背景下体力处于劣势。本场比赛比利时实力占优，但多库的缺阵和锋线状态低迷可能导致他们只能一球小胜，需防平局冷门。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="match-card">
+            <div class="match-meta">
+                <span class="group-tag">小组赛第 2 轮 · H 组</span>
+                <span class="match-time">2026-06-21 22:00</span>
+            </div>
+            
+            <div class="match-vs">
+                <div class="team-box">
+                    <span class="team-name">🇺🇾 乌拉圭</span>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="team-box">
+                    <span class="team-name">🇨🇻 佛得角</span>
+                </div>
+            </div>
+
+            <div class="match-info-banner">
+                <div class="info-item">
+                    <span class="info-label">🏟️ 比赛球场</span>
+                    <span class="info-value">迈阿密体育场 (Hard Rock Stadium)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌤️ 气候气温</span>
+                    <span class="info-value">雷阵雨 / 31°C (湿度 62%)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌿 场馆草皮</span>
+                    <span class="info-value">天然草</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⚖️ 主裁判</span>
+                    <span class="info-value">埃斯彭·埃斯考斯 (挪威)</span>
+                </div>
+            </div>
+
+            <div class="squad-info-section">
+                <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+                <p class="squad-desc-text">
+                    <strong>乌拉圭</strong>：<strong>罗纳德·阿劳霍</strong> (伤退), <strong>乔治安·德阿拉斯卡埃塔</strong> (伤退)。
+                    <br>
+                    <strong>佛得角</strong>：无。
+                </p>
+            </div>
+
+            <!-- 更衣室晴雨表 & 舆情哨 -->
+            <div class="dressing-room-barometer">
+                <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+                <div class="barometer-grid">
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇺🇾 乌拉圭</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 75%; background:#ff4444;"></div></div>
+                        <span class="meter-score">7.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 70%; background:#fbbf24;"></div></div>
+                        <span class="meter-score">7.0</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-red">🔴 隐患重重</div>
+                    </div>
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇨🇻 佛得角</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 40%; background:#00ff66;"></div></div>
+                        <span class="meter-score">4.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 15%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 90%; background:#00ff66;"></div></div>
+                        <span class="meter-score">9.0</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-green">🟢 正常出征</div>
+                    </div>
+                </div>
+                <div class="scout-brief">
+                    <div class="scout-title">📡 舆情哨情报简报</div>
+                    <div class="scout-content">
+<span class="scout-tag tag-alert">Uruguay: 后防核心阿劳霍及核心中场德阿拉斯卡埃塔重伤缺席，且遭遇入境延误全队情绪沮丧。</span>
+<span class="scout-tag tag-normal">Cape Verde: 首战逼平西班牙士气大振，球队防守体系运转完美，无伤病困扰。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="match-details">
+                <div class="details-grid">
+                    <!-- 战术板 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">
+                            <a href="https://www.fotmob.com/matches/uruguay-vs-cape-verde/4667800" target="_blank">
+                                📋 预计首发阵型 (4-3-3 vs 4-2-3-1)
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            </a>
+                        </div>
+                        <div class="soccer-pitch">
+                            <!-- Field Lines -->
+                            <div class="pitch-line midfield-line"></div>
+                            <div class="midfield-circle"></div>
+                            <div class="center-spot"></div>
+                            <div class="pitch-line penalty-box-left"></div>
+                            <div class="pitch-line penalty-box-right"></div>
+                            
+                            <!-- Home starters -->
+                <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">23</div>
+                    <div class="player-name">费尔南多·穆斯莱拉</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 87.500%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">13</div>
+                    <div class="player-name">吉列尔莫·瓦雷拉</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 62.500%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">3</div>
+                    <div class="player-name">塞巴斯蒂安·卡塞雷斯</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 37.500%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">16</div>
+                    <div class="player-name">马蒂亚斯·奥利韦拉</div>
+                </div>
+                <div class="player-node" style="left: 17.940%; top: 12.500%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">25</div>
+                    <div class="player-name">胡安·萨纳布里亚</div>
+                </div>
+                <div class="player-node" style="left: 29.908%; top: 79.000%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">8</div>
+                    <div class="player-name">费德里科·巴尔韦德</div>
+                </div>
+                <div class="player-node" style="left: 29.908%; top: 50.000%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">7</div>
+                    <div class="player-name">尼古拉斯·德拉克鲁斯</div>
+                </div>
+                <div class="player-node" style="left: 29.908%; top: 21.000%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">6</div>
+                    <div class="player-name">罗德里戈·本坦库尔</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 79.000%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">14</div>
+                    <div class="player-name">阿古斯丁·卡诺比奥</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">21</div>
+                    <div class="player-name">费德里科·比尼亚斯</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 21.000%;">
+                    <div class="player-circle" style="background:#5bc2e7; color:#ffffff; border:1px solid #ffffff;">20</div>
+                    <div class="player-name">马克西·阿劳霍</div>
+                </div>
+
+                            <!-- Away starters -->
+                <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">1</div>
+                    <div class="player-name">沃齐尼亚</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 12.500%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">22</div>
+                    <div class="player-name">史蒂文·莫雷拉</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 37.500%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">4</div>
+                    <div class="player-name">罗伯托·洛佩斯</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 62.500%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">3</div>
+                    <div class="player-name">迪内·博尔赫斯</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 87.500%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">13</div>
+                    <div class="player-name">西德尼·洛佩斯·卡布拉尔 🟨</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 30.000%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">6</div>
+                    <div class="player-name">凯文·皮纳</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 70.000%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">15</div>
+                    <div class="player-name">拉罗斯·杜阿尔特</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 16.300%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">20</div>
+                    <div class="player-name">莱恩·门德斯</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 50.000%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">10</div>
+                    <div class="player-name">贾米罗·蒙泰罗</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 83.700%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">7</div>
+                    <div class="player-name">约瓦内·卡布拉尔</div>
+                </div>
+                <div class="player-node" style="left: 58.078%; top: 50.000%;">
+                    <div class="player-circle" style="background:#002a8f; color:#ffffff; border:1px solid #ffd166;">19</div>
+                    <div class="player-name">戴隆·利夫拉门托</div>
+                </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI 预测 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
+                        <div class="prob-container">
+                            <div class="prob-labels">
+                                <span>乌拉圭 胜</span>
+                                <span>平局</span>
+                                <span>佛得角 胜</span>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="prob-segment" style="width: 51%; background: var(--primary-color);">51%</div>
+                                <div class="prob-segment" style="width: 32%; background: var(--text-muted); color: #fff;">32%</div>
+                                <div class="prob-segment" style="width: 17%; background: var(--accent-color);">17%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-sub-title">让球指数预测 (让球方)</div>
+                        <div class="recommendation-tag">佛得角 (+1) 胜/平 (首选)</div>
+                        <div class="recommendation-tag" style="background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.2); color: var(--accent-color);">平局 (乌拉圭刚好净胜1球) (次选)</div>
+                        
+                        <div class="section-sub-title" style="margin-top:0.75rem;">波胆/比分倾向</div>
+                        <div class="score-tags">
+<span class="score-badge">1-0</span>
+<span class="score-badge">1-1</span>
+<span class="score-badge upset">0-0</span>
+<span class="score-badge upset">0-1</span>
+                        </div>
+                        
+                        <div class="section-sub-title">核心战术要点</div>
+                        <ul class="factor-list">
+<li>乌拉圭防守核心阿劳霍因伤缺席，后防高位逼抢体系隐患增加</li>
+<li>迈阿密 31°C 闷热雷雨天气将极大地损耗贝尔萨高位压迫所需的体能</li>
+<li>佛得角首轮零封西班牙，防线站位极其紧凑且具备反击爆破点</li>
+                        </ul>
+                        
+                        <p class="prediction-detail-text">
+                            本场比赛冷意十足。乌拉圭正处于困境，防线核心阿劳霍和主力中场德阿拉斯卡埃塔双双伤停，且全队在入境美国时遭遇后勤严重延误。最关键的是，迈阿密当天的 31°C 高温伴随雷雨，这对于贝尔萨极度依赖体能的全场人盯人压迫战术无异于灭顶之灾。佛得角首战展现出惊人的防线硬度，如果他们能成功拖入下半场，乌拉圭极有可能因体能断档而被反击破门。看好佛得角受让分爆冷。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="match-card">
+            <div class="match-meta">
+                <span class="group-tag">小组赛第 2 轮 · G 组</span>
+                <span class="match-time">2026-06-21 21:00</span>
+            </div>
+            
+            <div class="match-vs">
+                <div class="team-box">
+                    <span class="team-name">🇳🇿 新西兰</span>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="team-box">
+                    <span class="team-name">🇪🇬 埃及</span>
+                </div>
+            </div>
+
+            <div class="match-info-banner">
+                <div class="info-item">
+                    <span class="info-label">🏟️ 比赛球场</span>
+                    <span class="info-value">温哥华不列颠哥伦比亚体育馆 (BC Place)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌤️ 气候气温</span>
+                    <span class="info-value">晴朗 / 24°C (湿度 41%)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🌿 场馆草皮</span>
+                    <span class="info-value">天然草</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⚖️ 主裁判</span>
+                    <span class="info-value">奥马尔·阿里 (阿联酋)</span>
+                </div>
+            </div>
+
+            <div class="squad-info-section">
+                <div class="squad-col-title">📋 伤停与阵容聚焦</div>
+                <p class="squad-desc-text">
+                    <strong>新西兰</strong>：无。
+                    <br>
+                    <strong>埃及</strong>：无。
+                </p>
+            </div>
+
+            <!-- 更衣室晴雨表 & 舆情哨 -->
+            <div class="dressing-room-barometer">
+                <div class="barometer-title">🕵️ 更衣室晴雨表 & 舆情哨</div>
+                <div class="barometer-grid">
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇳🇿 新西兰</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 50%; background:#00ff66;"></div></div>
+                        <span class="meter-score">5.0</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 15%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 80%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.0</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-green">🟢 正常出征</div>
+                    </div>
+                    <div class="barometer-team">
+                        <div class="barometer-team-name">🇪🇬 埃及</div>
+                        <div class="barometer-meters">
+                    <div class="meter-row">
+                        <span class="meter-label">🧠 更衣室凝聚力</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">💪 关键球员状态</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#38bdf8;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌡️ 外部压力指数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 55%; background:#00ff66;"></div></div>
+                        <span class="meter-score">5.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🚑 伤停风险系数</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 15%; background:#00ff66;"></div></div>
+                        <span class="meter-score">1.5</span>
+                    </div>
+                    <div class="meter-row">
+                        <span class="meter-label">🌪️ 战术稳定性</span>
+                        <div class="meter-bar"><div class="meter-fill" style="width: 85%; background:#00ff66;"></div></div>
+                        <span class="meter-score">8.5</span>
+                    </div>
+                        </div>
+                        <div class="barometer-status status-green">🟢 正常出征</div>
+                    </div>
+                </div>
+                <div class="scout-brief">
+                    <div class="scout-title">📡 舆情哨情报简报</div>
+                    <div class="scout-content">
+<span class="scout-tag tag-normal">New Zealand: 首场2-2平伊朗士气正盛，但防守隐患大，克里斯·伍德是前场唯一支点。</span>
+<span class="scout-tag tag-normal">Egypt: 萨拉赫状态正佳，首场战平比利时展现非凡韧性，无大名单核心伤病。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="match-details">
+                <div class="details-grid">
+                    <!-- 战术板 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">
+                            <a href="https://www.fotmob.com/matches/new-zealand-vs-egypt/4667792" target="_blank">
+                                📋 预计首发阵型 (4-2-3-1 vs 4-2-3-1)
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            </a>
+                        </div>
+                        <div class="soccer-pitch">
+                            <!-- Field Lines -->
+                            <div class="pitch-line midfield-line"></div>
+                            <div class="midfield-circle"></div>
+                            <div class="center-spot"></div>
+                            <div class="pitch-line penalty-box-left"></div>
+                            <div class="pitch-line penalty-box-right"></div>
+                            
+                            <!-- Home starters -->
+                <div class="player-node" style="left: 5.925%; top: 50.000%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">1</div>
+                    <div class="player-name">马克斯·克罗科姆</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 87.500%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">2</div>
+                    <div class="player-name">蒂姆·佩恩</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 62.500%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">16</div>
+                    <div class="player-name">芬恩·苏尔曼</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 37.500%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">5</div>
+                    <div class="player-name">迈克尔·博克索尔</div>
+                </div>
+                <div class="player-node" style="left: 14.901%; top: 12.500%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">13</div>
+                    <div class="player-name">利贝拉托·卡卡切</div>
+                </div>
+                <div class="player-node" style="left: 23.924%; top: 70.000%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">6</div>
+                    <div class="player-name">乔·贝尔</div>
+                </div>
+                <div class="player-node" style="left: 23.924%; top: 30.000%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">8</div>
+                    <div class="player-name">马尔科·斯塔梅尼奇</div>
+                </div>
+                <div class="player-node" style="left: 32.947%; top: 83.700%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">20</div>
+                    <div class="player-name">卡勒姆·麦考瓦特</div>
+                </div>
+                <div class="player-node" style="left: 32.947%; top: 50.000%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">10</div>
+                    <div class="player-name">萨普里特·辛格</div>
+                </div>
+                <div class="player-node" style="left: 32.947%; top: 16.300%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">11</div>
+                    <div class="player-name">伊利亚·贾斯特</div>
+                </div>
+                <div class="player-node" style="left: 41.922%; top: 50.000%;">
+                    <div class="player-circle" style="background:#000000; color:#ffffff; border:1px solid #ffffff;">9</div>
+                    <div class="player-name">克里斯·伍德</div>
+                </div>
+
+                            <!-- Away starters -->
+                <div class="player-node" style="left: 94.075%; top: 50.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">23</div>
+                    <div class="player-name">莫斯塔法·肖贝尔</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 12.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">3</div>
+                    <div class="player-name">莫哈梅德·哈尼</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 37.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">2</div>
+                    <div class="player-name">亚瑟·易卜拉欣</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 62.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">14</div>
+                    <div class="player-name">哈姆迪·法特希</div>
+                </div>
+                <div class="player-node" style="left: 85.099%; top: 87.500%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">13</div>
+                    <div class="player-name">阿哈迈德·法图赫 🟨</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 30.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">17</div>
+                    <div class="player-name">穆哈纳德·拉欣</div>
+                </div>
+                <div class="player-node" style="left: 76.076%; top: 70.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">19</div>
+                    <div class="player-name">马尔万·阿蒂亚 🟨</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 16.300%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">10</div>
+                    <div class="player-name">莫哈梅德·萨拉赫</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 50.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">8</div>
+                    <div class="player-name">伊马姆·阿舒尔</div>
+                </div>
+                <div class="player-node" style="left: 67.053%; top: 83.700%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">11</div>
+                    <div class="player-name">莫斯塔法·齐科</div>
+                </div>
+                <div class="player-node" style="left: 58.078%; top: 50.000%;">
+                    <div class="player-circle" style="background:#c1272d; color:#ffffff; border:1px solid #000000;">22</div>
+                    <div class="player-name">奥马尔·马尔穆什</div>
+                </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI 预测 -->
+                    <div class="detail-pane">
+                        <div class="pane-title">🤖 AI 赛事预测报告 (智能分析)</div>
+                        <div class="prob-container">
+                            <div class="prob-labels">
+                                <span>新西兰 胜</span>
+                                <span>平局</span>
+                                <span>埃及 胜</span>
+                            </div>
+                            <div class="prob-bar">
+                                <div class="prob-segment" style="width: 15%; background: var(--primary-color);">15%</div>
+                                <div class="prob-segment" style="width: 27%; background: var(--text-muted); color: #fff;">27%</div>
+                                <div class="prob-segment" style="width: 58%; background: var(--accent-color);">58%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-sub-title">让球指数预测 (让球方)</div>
+                        <div class="recommendation-tag">埃及 胜 (首选)</div>
+                        <div class="recommendation-tag" style="background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.2); color: var(--accent-color);">平局 (埃及刚好净胜1球) (次选)</div>
+                        
+                        <div class="section-sub-title" style="margin-top:0.75rem;">波胆/比分倾向</div>
+                        <div class="score-tags">
+<span class="score-badge">1-2</span>
+<span class="score-badge">0-1</span>
+<span class="score-badge upset">1-1</span>
+<span class="score-badge upset">0-2</span>
+                        </div>
+                        
+                        <div class="section-sub-title">核心战术要点</div>
+                        <ul class="factor-list">
+<li>埃及球星萨拉赫个人牵制力强大，马尔穆什在边路能获得大量空间</li>
+<li>新西兰防守端已连续 12 场比赛丢球，极难零封埃及攻击群</li>
+<li>温哥华 24°C 晴朗凉爽的天气有利于埃及的脚下传递和快速反击</li>
+                        </ul>
+                        
+                        <p class="prediction-detail-text">
+                            埃及在首场顽强逼平比利时，展现出了优秀的防守和纪律性。本场面对防守漏洞较大（已连续 12 场丢球）的新西兰，萨拉赫领衔的法老军团将迎来更多阵地进攻和边路突破的机会。虽然新西兰依靠克里斯·伍德的空战和身体对抗具备很强的定位球威胁，但在温哥华宜人的天气下，埃及的技术优势将得到完美发挥。看好埃及顺利拿下一场胜利。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            </div>
+        </main>
+    </div>
+    <script>
+        // 双指缩放网页功能 (针对 Mac 触控板)
+        let scale = 1;
+        window.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                scale -= e.deltaY * 0.01;
+                scale = Math.min(Math.max(0.5, scale), 3);
+                document.body.style.zoom = scale;
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
+
+
+</body>
+</html>
